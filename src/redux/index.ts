@@ -1,7 +1,9 @@
 import { combineReducers } from 'redux';
-import actionReducer from './reducers/actionReducer';
+import chessboardReducer from './reducers/chessboardReducer';
+import movesLogReducer from './reducers/movesLogReducer';
 
 export const rootReducer = combineReducers({
-    synteticAction: actionReducer,
+    chessboard: chessboardReducer,
+    movesLog: movesLogReducer
 });
 export type RootState = ReturnType<typeof rootReducer>;

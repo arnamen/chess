@@ -1,13 +1,15 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { RootState } from './redux';
-import { actionSetStatus, actionResetStatus } from './redux/reducers/actionReducer/types';
-
-interface Props extends RootState {
+import { updateChessboard, updateChessboardOneTile } from './redux/reducers/chessboardReducer/types';
+import GameManager from './pages/GameManager';
+import MovesLog from './components/MovesLog';
+import GameInfo from './components/GameInfo';
+interface Props {
   
 }
 interface State {
-  
+
 }
 
 export class App extends Component<Props, State> {
@@ -17,18 +19,19 @@ export class App extends Component<Props, State> {
     console.log(this.props);
     return (
       <div>
-          <h2>{'' + this.props.synteticAction.actionStatus}</h2>
+          <GameManager/>
       </div>
     )
   }
 }
 
 const mapStateToProps = (state: RootState) => ({
-  synteticAction: state.synteticAction
+  chessboard: state.chessboard.chessboard,
+  movesLog: state.movesLog.movesLog
 })
 
 const mapDispatchToProps = {
-  actionSetStatus, actionResetStatus
+  updateChessboard, updateChessboardOneTile
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(App)
