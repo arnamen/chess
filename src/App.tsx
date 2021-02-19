@@ -5,8 +5,10 @@ import { updateChessboard, updateChessboardOneTile } from './redux/reducers/ches
 import GameManager from './pages/GameManager';
 import MovesLog from './components/MovesLog';
 import GameInfo from './components/GameInfo';
+
+import './App.css';
 interface Props {
-  
+
 }
 interface State {
 
@@ -16,11 +18,14 @@ export class App extends Component<Props, State> {
   state = {}
 
   render() {
-    console.log(this.props);
     return (
-      <div>
-          <GameManager/>
-      </div>
+
+        <div className='App'>
+          <MovesLog />
+          <GameManager />
+          <GameInfo />
+        </div>
+
     )
   }
 }

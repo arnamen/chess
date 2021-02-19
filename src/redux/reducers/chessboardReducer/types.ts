@@ -7,16 +7,100 @@ export function typedAction(type: string, payload?: any) {
   return { type, payload };
 }
 
+
+export const WHITE = {
+  PAWN:{
+    type: 'PAWN',
+    points: 1,
+    side: 'WHITE'
+  },
+  BISHOP:{
+    type: 'BISHOP',
+    points: 10,
+    side: 'WHITE'
+  },
+  KNIGHT:{
+    type: 'KNIGHT',
+    points: 10,
+    side: 'WHITE'
+  },
+  ROOK:{
+    type: 'ROOK',
+    points: 10,
+    side: 'WHITE'
+  },
+  QUEEN:{
+    type: 'QUEEN',
+    points: 100,
+    side: 'WHITE'
+  },
+  KING:{
+    type: 'KING',
+    points: 1000,
+    side: 'WHITE'
+  },
+  EMPTY:{
+    type: 'EMPTY',
+    points: 0,
+    side: undefined
+  },
+} as const;
+
+export const BLACK = {
+  PAWN:{
+    type: 'PAWN',
+    points: 1,
+    side: 'BLACK'
+  },
+  BISHOP:{
+    type: 'BISHOP',
+    points: 10,
+    side: 'BLACK'
+  },
+  KNIGHT:{
+    type: 'KNIGHT',
+    points: 10,
+    side: 'BLACK'
+  },
+  ROOK:{
+    type: 'ROOK',
+    points: 10,
+    side: 'BLACK'
+  },
+  QUEEN:{
+    type: 'QUEEN',
+    points: 100,
+    side: 'BLACK'
+  },
+  KING:{
+    type: 'KING',
+    points: 1000,
+    side: 'BLACK'
+  },
+  EMPTY:{
+    type: 'EMPTY',
+    points: 0,
+    side: undefined
+  },
+} as const;
+
+type ValueOf<T> = T[keyof T];
+export type chessPieceType = ValueOf<typeof WHITE> | ValueOf<typeof BLACK>;
+
 export interface StateInterface {
-    chessboard: number[][],
+  chessboard: chessPieceType[][],
 }
 
-export const updateChessboard = (newChessboard: number[][]) => {
-  return typedAction('chessboard/update', {chessboard: newChessboard});
+export const updateChessboard = (newChessboard: chessPieceType[][]) => {
+  return typedAction('chessboard/update', { chessboard: newChessboard });
 }
 
-export const updateChessboardOneTile = (tileIndex: number, newTileValue: number) => {
-  return typedAction('chessboard/updateOneTile', {tileIndex, newTileValue});
+export const updateChessboardOneTile = (tileIndex: number, newTileValue: chessPieceType) => {
+  return typedAction('chessboard/updateOneTile', { tileIndex, newTileValue });
 }
 
-export type actionTypes = ReturnType<typeof updateChessboard | typeof updateChessboardOneTile>;
+export const createChessboard = () => {
+  return typedAction('chessboard/create');
+}
+
+export type actionTypes = ReturnType<typeof updateChessboard | typeof updateChessboardOneTile | typeof createChessboard>;
