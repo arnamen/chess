@@ -1,20 +1,22 @@
-import React, { Component } from 'react'
+import React, { ReactElement } from 'react'
+import Tile from '../Tile';
+import {ChessPieceType} from '../../redux/reducers/chessboardReducer/types';
 
+import classes from './Chessboard.module.css';
 interface Props {
-    
-}
-interface State {
-    
+    chessboardData: ChessPieceType[][]
 }
 
-export default class index extends Component<Props, State> {
-    state = {}
-
-    render() {
-        return (
-            <div>
-                
-            </div>
-        )
-    }
+export default function Chessboard({chessboardData}: Props): ReactElement {
+    return (
+        <div className={classes.Chessboard}>
+            {chessboardData.map((chessboardLine, y) => {
+                return chessboardLine.map((piece, x) => {
+                    return <Tile 
+                    chessPieceType={piece} 
+                    key={`${y*8+x}_${piece.side}_${piece.type}`}/>
+                })
+            })}
+        </div>
+    )
 }

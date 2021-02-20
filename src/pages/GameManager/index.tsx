@@ -1,12 +1,14 @@
-import React, { Component } from 'react'
+import React, { Component, ReactElement } from 'react'
 import { connect, ConnectedProps } from 'react-redux';
 import Tile from '../../components/Tile';
 import ChessPiece from '../../components/ChessPiece';
-import { updateChessboard, updateChessboardOneTile, createChessboard, WHITE, BLACK } from '../../redux/reducers/chessboardReducer/types';
+import { updateChessboard, updateChessboardOneTile, createChessboard, WHITE, BLACK, ChessPieceType } from '../../redux/reducers/chessboardReducer/types';
 import { RootState } from '../../redux/index';
+import Chessboard from '../../components/Chessboard';
+import Spinner from '../../components/Spinner';
 
 const mapStateToProps = (state: RootState) => ({
-    chessboard: state.chessboard.chessboard
+    chessboard: state.chessboard.chessboard,
 })
 
 const mapDispatchToProps = {
@@ -43,10 +45,10 @@ class GameManager extends Component<Props, State> {
     }
 
     render() {
+        let chessboard: ReactElement = <Spinner/>
+        if(this.props.chessboard !== null) chessboard = <Chessboard chessboardData={this.props.chessboard}/>;
         return (
-            <div>
-
-            </div>
+            chessboard
         )
     }
 }

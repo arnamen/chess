@@ -1,0 +1,14 @@
+.Tile {
+    width: 60px;
+    height: 60px;
+    display: block;
+    background-color: skyblue;
+}
+
+.Tile__white {
+    fill: white;
+}
+
+.Tile__black {
+    fill: black;
+}

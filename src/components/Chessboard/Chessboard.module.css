@@ -1,0 +1,7 @@
+.Chessboard {
+    width: 600px;
+    height: auto;
+    overflow: auto;
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+}
