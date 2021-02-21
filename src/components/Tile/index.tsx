@@ -8,18 +8,27 @@ import classes from './Tile.module.css';
 
 interface Props {
     chessPieceType: ChessPieceType,
-    // tileIndex: number
+    tileIndex: {
+        x: number,
+        y: number
+    }
 }
 
-export default function Tile({chessPieceType}: Props): ReactElement {
+export default function Tile({chessPieceType, tileIndex}: Props): ReactElement {
+
+    const appliedClasses: string[] = [classes.Tile];
+    //tiles color
+    if(Math.pow(-1, tileIndex.x + tileIndex.y) > 0)
+     appliedClasses.push( classes.Tile__even);
+    else appliedClasses.push( classes.Tile__odd);
 
     const Piece = getPieceElementByType(chessPieceType);
     let tile = <div
-    className={classes.Tile}></div>
+    className={appliedClasses.join(' ')}></div>
     if(Piece) {
         tile = <div
-            className={classes.Tile + ` ${chessPieceType.side === 'WHITE' ? classes.Tile__white : classes.Tile__black}`}>
-                    <Piece/>
+            className={appliedClasses.join(' ')}>
+                    <Piece className={classes.Tile__piece}/>
                 </div>;
     }
 

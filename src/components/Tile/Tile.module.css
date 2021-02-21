@@ -1,14 +1,23 @@
 .Tile {
-    width: 60px;
-    height: 60px;
+    width: 5vw;
+    height: 5vw;
+    max-width: 70px;
+    max-height: 70px;
     display: block;
     background-color: skyblue;
 }
 
-.Tile__white {
-    fill: white;
+.Tile__even {
+    background-color: #f1d9b5;
 }
 
-.Tile__black {
-    fill: black;
+.Tile__odd {
+    background-color: #b58863;
+}
+
+.Tile__piece {
+    display: block;
+    height: 100%;
+    width: 100%;
+    margin-left: 0.05vw;
 }

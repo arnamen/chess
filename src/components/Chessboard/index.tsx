@@ -8,11 +8,13 @@ interface Props {
 }
 
 export default function Chessboard({chessboardData}: Props): ReactElement {
+
     return (
         <div className={classes.Chessboard}>
             {chessboardData.map((chessboardLine, y) => {
                 return chessboardLine.map((piece, x) => {
                     return <Tile 
+                    tileIndex={{x, y}}
                     chessPieceType={piece} 
                     key={`${y*8+x}_${piece.side}_${piece.type}`}/>
                 })
