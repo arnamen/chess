@@ -21,7 +21,11 @@ interface Props extends PropsFromRedux {
 
 }
 interface State {
-    currentPlayerTurn: 'white' | 'black'
+    currentPlayerTurn: 'white' | 'black',
+    selectedPiece: {
+        piece: ChessPieceType,
+        tileIndex: {x: number, y: number}
+    } | null
 }
 
 //white - "+", black - "-"
@@ -36,7 +40,10 @@ class GameManager extends Component<Props, State> {
 
     componentDidMount() {
         this.props.createChessboard();
-        this.setState({ currentPlayerTurn: 'white' });
+        this.setState({ 
+            currentPlayerTurn: 'white',
+            selectedPiece: null
+         });
 
     }
 
@@ -44,9 +51,22 @@ class GameManager extends Component<Props, State> {
 
     }
 
+    setSelectedPiece(piece: ChessPieceType, tileIndex: {x: number, y: number}) {
+        console.log(piece, tileIndex)
+        this.setState({ 
+            selectedPiece: {
+                piece, tileIndex
+            },
+         });
+    }
+
     render() {
         let chessboard: ReactElement = <Spinner/>
-        if(this.props.chessboard !== null) chessboard = <Chessboard chessboardData={this.props.chessboard} currentPlayerTurn={this.state.currentPlayerTurn}/>;
+        if(this.props.chessboard !== null) chessboard = <Chessboard 
+        chessboardData={this.props.chessboard} 
+        currentPlayerTurn={this.state.currentPlayerTurn}
+        onSelectPiece={this.setSelectedPiece.bind(this)}/>;
+        
         return (
             chessboard
         )

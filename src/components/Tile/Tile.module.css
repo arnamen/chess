@@ -13,6 +13,10 @@
     cursor: pointer;
 }
 
+.Tile__highlighted {
+    border: 3px solid rgb(255, 235, 51);
+}
+
 .Tile__active:hover {
     border: 3px solid greenyellow;
 }
