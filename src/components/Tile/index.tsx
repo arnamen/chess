@@ -11,10 +11,11 @@ interface Props {
     tileIndex: {
         x: number,
         y: number
-    }
+    },
+    isActive: boolean
 }
 
-export default function Tile({chessPieceType, tileIndex}: Props): ReactElement {
+export default function Tile({chessPieceType, tileIndex, isActive}: Props): ReactElement {
 
     const appliedClasses: string[] = [classes.Tile];
     //tiles color
@@ -23,6 +24,9 @@ export default function Tile({chessPieceType, tileIndex}: Props): ReactElement {
     else appliedClasses.push( classes.Tile__odd);
 
     const Piece = getPieceElementByType(chessPieceType);
+
+    if(Piece && isActive) appliedClasses.push(classes.Tile__active);
+
     let tile = <div
     className={appliedClasses.join(' ')}></div>
     if(Piece) {

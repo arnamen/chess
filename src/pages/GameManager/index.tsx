@@ -46,7 +46,7 @@ class GameManager extends Component<Props, State> {
 
     render() {
         let chessboard: ReactElement = <Spinner/>
-        if(this.props.chessboard !== null) chessboard = <Chessboard chessboardData={this.props.chessboard}/>;
+        if(this.props.chessboard !== null) chessboard = <Chessboard chessboardData={this.props.chessboard} currentPlayerTurn={this.state.currentPlayerTurn}/>;
         return (
             chessboard
         )

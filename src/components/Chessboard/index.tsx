@@ -4,11 +4,13 @@ import {ChessPieceType} from '../../redux/reducers/chessboardReducer/types';
 
 import classes from './Chessboard.module.css';
 interface Props {
-    chessboardData: ChessPieceType[][]
+    chessboardData: ChessPieceType[][],
+    currentPlayerTurn: 'white' | 'black'
 }
 
-export default function Chessboard({chessboardData}: Props): ReactElement {
+export default function Chessboard({chessboardData, currentPlayerTurn}: Props): ReactElement {
 
+    
     return (
         <div className={classes.Chessboard}>
             {chessboardData.map((chessboardLine, y) => {
@@ -16,6 +18,7 @@ export default function Chessboard({chessboardData}: Props): ReactElement {
                     return <Tile 
                     tileIndex={{x, y}}
                     chessPieceType={piece} 
+                    isActive={currentPlayerTurn === piece.side.toLowerCase()}
                     key={`${y*8+x}_${piece.side}_${piece.type}`}/>
                 })
             })}
