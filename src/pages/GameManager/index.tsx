@@ -1,11 +1,13 @@
 import React, { Component, ReactElement } from 'react'
 import { connect, ConnectedProps } from 'react-redux';
-import Tile from '../../components/Tile';
+import Tile, { TileIndex } from '../../components/Tile';
 import ChessPiece from '../../components/ChessPiece';
-import { updateChessboard, updateChessboardOneTile, createChessboard, WHITE, BLACK, ChessPieceType } from '../../redux/reducers/chessboardReducer/types';
+import { updateChessboard, updateChessboardOneTile, createChessboard, WHITE, BLACK, ChessPieceType, SelectedPiece } from '../../redux/reducers/chessboardReducer/types';
 import { RootState } from '../../redux/index';
 import Chessboard from '../../components/Chessboard';
 import Spinner from '../../components/Spinner';
+
+import { getPossibleMoves } from '../../utils/moves-logic-helper';
 
 const mapStateToProps = (state: RootState) => ({
     chessboard: state.chessboard.chessboard,
@@ -22,10 +24,8 @@ interface Props extends PropsFromRedux {
 }
 interface State {
     currentPlayerTurn: 'white' | 'black',
-    selectedPiece: {
-        piece: ChessPieceType,
-        tileIndex: {x: number, y: number}
-    } | null
+    selectedPiece: SelectedPiece,
+    possibleMoves: TileIndex[]
 }
 
 //white - "+", black - "-"
@@ -40,10 +40,11 @@ class GameManager extends Component<Props, State> {
 
     componentDidMount() {
         this.props.createChessboard();
-        this.setState({ 
+        this.setState({
             currentPlayerTurn: 'white',
-            selectedPiece: null
-         });
+            selectedPiece: null,
+            possibleMoves: []
+        });
 
     }
 
@@ -51,22 +52,35 @@ class GameManager extends Component<Props, State> {
 
     }
 
-    setSelectedPiece(piece: ChessPieceType, tileIndex: {x: number, y: number}) {
-        console.log(piece, tileIndex)
-        this.setState({ 
-            selectedPiece: {
-                piece, tileIndex
-            },
-         });
+    setSelectedPiece(selectedPiece: SelectedPiece) {
+
+        if (selectedPiece) {
+            const piece = selectedPiece.piece;
+            const tileIndex = selectedPiece.tileIndex;
+            const chessboard = this.props.chessboard;
+            let possibleMoves:TileIndex[] = [];
+            if(chessboard)
+            possibleMoves = getPossibleMoves(chessboard, selectedPiece)
+
+            this.setState({
+                selectedPiece: {
+                    piece, tileIndex
+                },
+                possibleMoves
+            });
+        }
+
     }
 
     render() {
-        let chessboard: ReactElement = <Spinner/>
-        if(this.props.chessboard !== null) chessboard = <Chessboard 
-        chessboardData={this.props.chessboard} 
-        currentPlayerTurn={this.state.currentPlayerTurn}
-        onSelectPiece={this.setSelectedPiece.bind(this)}/>;
-        
+        let chessboard: ReactElement = <Spinner />
+        if (this.props.chessboard !== null) chessboard = <Chessboard
+            chessboardData={this.props.chessboard}
+            currentPlayerTurn={this.state.currentPlayerTurn}
+            onSelectPiece={this.setSelectedPiece.bind(this)} 
+            selectedPiece={this.state.selectedPiece}
+            highlightedTiles={this.state.possibleMoves}/>;
+
         return (
             chessboard
         )

@@ -86,6 +86,12 @@ export const BLACK = {
 type ValueOf<T> = T[keyof T];
 export type ChessPieceType = ValueOf<typeof WHITE> | ValueOf<typeof BLACK>;
 
+export type SelectedPiece = {
+    piece: ChessPieceType,
+    tileIndex: {x: number, y: number}
+} | null
+
+
 export interface StateInterface {
   chessboard: ChessPieceType[][] | null,
 }
