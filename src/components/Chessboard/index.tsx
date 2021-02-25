@@ -1,4 +1,6 @@
 import React, { ReactElement } from 'react'
+import {v4} from 'uuid';
+
 import Tile, {TileIndex} from '../Tile';
 import {ChessPieceType, SelectedPiece} from '../../redux/reducers/chessboardReducer/types';
 
@@ -9,16 +11,19 @@ interface Props {
     highlightedTiles?: TileIndex[],
     selectedPiece?: SelectedPiece,
     onSelectPiece: (selectedPiece: SelectedPiece) => void,
+    onMovePiece: (tileIndex: TileIndex) => void,
     
 }
 
-export default function Chessboard({chessboardData, currentPlayerTurn, onSelectPiece, highlightedTiles, selectedPiece}: Props): ReactElement {
+export default function Chessboard({chessboardData, currentPlayerTurn, onSelectPiece, highlightedTiles, selectedPiece, onMovePiece}: Props): ReactElement {
 
     
     return (
         <div className={classes.Chessboard}>
             {chessboardData.map((chessboardLine, y) => {
+                
                 return chessboardLine.map((piece, x) => {
+
                     return <Tile 
                     tileIndex={{x, y}}
                     chessPieceType={piece} 
@@ -27,6 +32,7 @@ export default function Chessboard({chessboardData, currentPlayerTurn, onSelectP
                     isSelected={selectedPiece?.tileIndex.x === x && selectedPiece.tileIndex.y === y}
                     key={`${y*8+x}_${piece.side}_${piece.type}`}
                     onSelectPiece={onSelectPiece}
+                    onMovePiece={onMovePiece}
                     />
                 })
             })}

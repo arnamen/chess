@@ -42,7 +42,7 @@ const getPossibleMoves_PAWN = (chessboard:ChessPieceType[][], selectedPiece: Sel
         case 'BLACK':
 
             if(chessboard[pieceYpos + 1][pieceXpos] && chessboard[pieceYpos + 1][pieceXpos].type === 'EMPTY') 
-            possibleMoves.push({x: pieceXpos, y: pieceYpos - 1});
+            possibleMoves.push({x: pieceXpos, y: pieceYpos + 1});
 
             if( selectedPiece.piece.isFirstMove && 
                 chessboard[pieceYpos + 2][pieceXpos] && 

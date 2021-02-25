@@ -2,7 +2,7 @@ import React, { Component, ReactElement } from 'react'
 import { connect, ConnectedProps } from 'react-redux';
 import Tile, { TileIndex } from '../../components/Tile';
 import ChessPiece from '../../components/ChessPiece';
-import { updateChessboard, updateChessboardOneTile, createChessboard, WHITE, BLACK, ChessPieceType, SelectedPiece } from '../../redux/reducers/chessboardReducer/types';
+import { updateChessboard, updateChessboardOneTile, createChessboard, WHITE, BLACK, ChessPieceType, SelectedPiece, chessboardMakeMove } from '../../redux/reducers/chessboardReducer/types';
 import { RootState } from '../../redux/index';
 import Chessboard from '../../components/Chessboard';
 import Spinner from '../../components/Spinner';
@@ -14,7 +14,7 @@ const mapStateToProps = (state: RootState) => ({
 })
 
 const mapDispatchToProps = {
-    updateChessboard, updateChessboardOneTile, createChessboard
+    updateChessboard, updateChessboardOneTile, createChessboard, chessboardMakeMove
 }
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -72,6 +72,17 @@ class GameManager extends Component<Props, State> {
 
     }
 
+    onMovePiece(tileIndex: TileIndex) {
+        if(this.state.selectedPiece?.tileIndex){
+        this.props.chessboardMakeMove(this.state.selectedPiece?.tileIndex, tileIndex);
+        this.setState({
+            selectedPiece: null,
+            possibleMoves: [],
+            currentPlayerTurn: this.state.currentPlayerTurn === 'white' ? 'black' : 'white'
+        })
+        }
+    }
+
     render() {
         let chessboard: ReactElement = <Spinner />
         if (this.props.chessboard !== null) chessboard = <Chessboard
@@ -79,7 +90,8 @@ class GameManager extends Component<Props, State> {
             currentPlayerTurn={this.state.currentPlayerTurn}
             onSelectPiece={this.setSelectedPiece.bind(this)} 
             selectedPiece={this.state.selectedPiece}
-            highlightedTiles={this.state.possibleMoves}/>;
+            highlightedTiles={this.state.possibleMoves}
+            onMovePiece={this.onMovePiece.bind(this)}/>;
 
         return (
             chessboard
