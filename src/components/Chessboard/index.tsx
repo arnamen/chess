@@ -7,7 +7,7 @@ import {ChessPieceType, SelectedPiece} from '../../redux/reducers/chessboardRedu
 import classes from './Chessboard.module.css';
 interface Props {
     chessboardData: ChessPieceType[][],
-    currentPlayerTurn: 'white' | 'black',
+    currentPlayerTurn: 'WHITE' | 'BLACK',
     highlightedTiles?: TileIndex[],
     selectedPiece?: SelectedPiece,
     onSelectPiece: (selectedPiece: SelectedPiece) => void,
@@ -27,7 +27,7 @@ export default function Chessboard({chessboardData, currentPlayerTurn, onSelectP
                     return <Tile 
                     tileIndex={{x, y}}
                     chessPieceType={piece} 
-                    isActive={currentPlayerTurn === piece.side.toLowerCase()}
+                    isActive={currentPlayerTurn === piece.side}
                     isHighlighted={!!highlightedTiles?.find(highlightedTile => highlightedTile.x === x && highlightedTile.y === y)}
                     isSelected={selectedPiece?.tileIndex.x === x && selectedPiece.tileIndex.y === y}
                     key={`${y*8+x}_${piece.side}_${piece.type}`}

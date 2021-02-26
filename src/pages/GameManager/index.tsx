@@ -7,7 +7,7 @@ import { RootState } from '../../redux/index';
 import Chessboard from '../../components/Chessboard';
 import Spinner from '../../components/Spinner';
 
-import { getPossibleMoves } from '../../utils/moves-logic-helper';
+import { getPossibleMoves, isCheck } from '../../utils/moves-logic-helper';
 
 const mapStateToProps = (state: RootState) => ({
     chessboard: state.chessboard.chessboard,
@@ -23,7 +23,7 @@ interface Props extends PropsFromRedux {
 
 }
 interface State {
-    currentPlayerTurn: 'white' | 'black',
+    currentPlayerTurn: 'WHITE' | 'BLACK',
     selectedPiece: SelectedPiece,
     possibleMoves: TileIndex[]
 }
@@ -41,7 +41,7 @@ class GameManager extends Component<Props, State> {
     componentDidMount() {
         this.props.createChessboard();
         this.setState({
-            currentPlayerTurn: 'white',
+            currentPlayerTurn: 'WHITE',
             selectedPiece: null,
             possibleMoves: []
         });
@@ -75,10 +75,11 @@ class GameManager extends Component<Props, State> {
     onMovePiece(tileIndex: TileIndex) {
         if(this.state.selectedPiece?.tileIndex){
         this.props.chessboardMakeMove(this.state.selectedPiece?.tileIndex, tileIndex);
+        if(this.props.chessboard) isCheck(this.props.chessboard, this.state.currentPlayerTurn);
         this.setState({
             selectedPiece: null,
             possibleMoves: [],
-            currentPlayerTurn: this.state.currentPlayerTurn === 'white' ? 'black' : 'white'
+            currentPlayerTurn: this.state.currentPlayerTurn === 'WHITE' ? 'BLACK' : 'WHITE'
         })
         }
     }
