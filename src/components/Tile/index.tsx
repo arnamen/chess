@@ -16,14 +16,18 @@ interface Props {
     isActive: boolean,
     isSelected?: boolean,
     isHighlighted?: boolean,
+    isImportant?: boolean,
+    isDanger?: boolean,
     onSelectPiece: (selectedPiece: SelectedPiece) => void,
     onMovePiece: (tileIndex: TileIndex) => void,
 }
 
-export default function Tile({ chessPieceType, tileIndex, isActive, isSelected, isHighlighted, onSelectPiece, onMovePiece }: Props): ReactElement {
+export default function Tile({ chessPieceType, tileIndex, isActive, isSelected, isHighlighted, onSelectPiece, onMovePiece, isImportant, isDanger }: Props): ReactElement {
 
     const appliedClasses: string[] = [classes.Tile];
-    //tiles color
+    isImportant && appliedClasses.push(classes.Tile__important);
+    isDanger && appliedClasses.push(classes.Tile__danger);
+    //tiles color (calculates if tile is even or odd)
     if (Math.pow(-1, tileIndex.x + tileIndex.y) > 0)
         appliedClasses.push(classes.Tile__even);
     else appliedClasses.push(classes.Tile__odd);

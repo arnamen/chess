@@ -1,10 +1,17 @@
+.Tile__important {
+    background-color: chartreuse!important;
+}
+
+.Tile__danger {
+    background-color: red!important;
+}
+
 .Tile {
     width: 5vw;
     height: 5vw;
     max-width: 70px;
     max-height: 70px;
     display: block;
-    background-color: skyblue;
     box-sizing:border-box;
     position: relative;
 }
@@ -48,7 +55,9 @@
 
 .Tile__active:hover > .Tile__piece, 
 .Tile__selected > .Tile__piece, 
-.Tile__highlighted > .Tile__piece {
+.Tile__highlighted > .Tile__piece,
+.Tile__important > .Tile__piece
+.Tile__danger > .Tile__piece {
     position: absolute;
     top: -1px;
     left: -3px;

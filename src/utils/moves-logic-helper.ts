@@ -1,7 +1,13 @@
 import { ChessPieceType, SelectedPiece} from '../redux/reducers/chessboardReducer/types';
 import {TileIndex} from '../components/Tile';
+
+export interface CheckInfo {
+    kingSide: 'WHITE' | 'BLACK',
+    king: SelectedPiece | null,
+    threatingPiece: SelectedPiece
+}
 //will be verified if there check for king of corresponding side
-export const isCheck = (chessboard:ChessPieceType[][], playerSide: 'WHITE' | 'BLACK') => {
+export const isCheck = (chessboard:ChessPieceType[][], playerSide: 'WHITE' | 'BLACK'): CheckInfo | null => {
     //find king position on board
     let king: SelectedPiece | null = null;
     //function wrapper for breaking from nested loop
@@ -16,40 +22,33 @@ export const isCheck = (chessboard:ChessPieceType[][], playerSide: 'WHITE' | 'BL
     })()
     if(!king) throw new Error(`${playerSide} king is not on board`);
 
-    const opponentSide = playerSide === 'WHITE' ? 'BLACK' : 'WHITE';
+    const checkPossibleMovesThreat = (opponentPossMoves: TileIndex[], kingPos: TileIndex) => {
+        for (const move of opponentPossMoves) {
+            if(move.x === king?.tileIndex.x && move.y === king.tileIndex.y) return true; 
+        }
+        return false;
+    }
 
-    const AllOpponentPossibleMoves: TileIndex[][] = [];
-
+    //get all possible moves of each opponent figure
+    // and check if there is a check for the king
     for (let y = 0; y < chessboard.length; y++) {
         for (let x = 0; x < chessboard[y].length; x++) {
+            
             const currentPiece:SelectedPiece = {piece: Object.assign(chessboard[y][x]), tileIndex: {x,y}};
-            if(currentPiece.piece.side === opponentSide) AllOpponentPossibleMoves.push(getPossibleMoves(chessboard, currentPiece));
+            const opponentPiecePossibleMoves = getPossibleMoves(chessboard, currentPiece);
+
+            if(checkPossibleMovesThreat(opponentPiecePossibleMoves, king.tileIndex)) {
+                const checkInfo: CheckInfo = {
+                    kingSide: playerSide, 
+                    king,
+                    threatingPiece: currentPiece
+                }
+                return checkInfo;
+            }
         }
     }
 
-    let isCheckInfo: {
-        kingSide: typeof playerSide,
-        king: typeof king,
-        threatingPiece: SelectedPiece
-    } | null = null;
-
-    AllOpponentPossibleMoves.forEach(curPiecePossMoves => curPiecePossMoves.forEach(curPiecePossMove => {
-        if(isCheckInfo) return;
-        if(curPiecePossMove.x === king?.tileIndex.x && curPiecePossMove.y === king?.tileIndex.y) {
-            isCheckInfo = {
-                kingSide: playerSide, 
-                king,
-                threatingPiece:  {
-                    piece: chessboard[curPiecePossMove.y][curPiecePossMove.x],
-                    tileIndex: {x: curPiecePossMove.x, y: curPiecePossMove.y}
-                    }
-            }
-        }
-    }))
-
-    console.log(isCheckInfo);
-
-    //get all possible moves of each opponent figure
+    return null;
 
 }
 
