@@ -141,8 +141,12 @@ const getPossibleMoves_BISHOP = (chessboard: ChessPieceType[][], selectedPiece: 
             while (x >= 0 && y >= 0) {
                 //skip first iteration
                 //because it is tile with current figure on it
-                if(x === selectedPiece.tileIndex.x && y === selectedPiece.tileIndex.y) {x--; y--; continue};
-                console.log(x, y, chessboard[y][x].type)
+                if (x === selectedPiece.tileIndex.x &&
+                    y === selectedPiece.tileIndex.y) {
+                    x--; y--;
+                    continue
+                };
+
                 if (chessboard[y][x].type === 'EMPTY') {
                     possibleMoves.push({ x, y });
                     x--; y--;
@@ -164,14 +168,17 @@ const getPossibleMoves_BISHOP = (chessboard: ChessPieceType[][], selectedPiece: 
 
         const possibleMoves: TileIndex[] = [];
 
-        
+
         if (selectedPiece) {
             let { x, y } = selectedPiece.tileIndex;
             const piece = Object.assign({}, selectedPiece.piece);
             while (x < 8 && y >= 0) {
                 //skip first iteration
                 //because it is tile with current figure on it
-                if(x === selectedPiece.tileIndex.x && y === selectedPiece.tileIndex.y) {x++; y--; continue};
+                if (x === selectedPiece.tileIndex.x && y === selectedPiece.tileIndex.y) { 
+                    x++; y--; 
+                    continue 
+                };
 
                 if (chessboard[y][x].type === 'EMPTY') {
                     possibleMoves.push({ x, y });
@@ -201,7 +208,10 @@ const getPossibleMoves_BISHOP = (chessboard: ChessPieceType[][], selectedPiece: 
 
                 //skip first iteration
                 //because it is tile with current figure on it
-                if(x === selectedPiece.tileIndex.x && y === selectedPiece.tileIndex.y) {x--; y++; continue};
+                if (x === selectedPiece.tileIndex.x && y === selectedPiece.tileIndex.y) { 
+                    x--; y++; 
+                    continue; 
+                };
 
                 if (chessboard[y][x].type === 'EMPTY') {
                     possibleMoves.push({ x, y });
@@ -231,7 +241,10 @@ const getPossibleMoves_BISHOP = (chessboard: ChessPieceType[][], selectedPiece: 
 
                 //skip first iteration
                 //because it is tile with current figure on it
-                if(x === selectedPiece.tileIndex.x && y === selectedPiece.tileIndex.y) {x++; y++; continue};
+                if (x === selectedPiece.tileIndex.x && y === selectedPiece.tileIndex.y) { 
+                    x++; y++; 
+                    continue;
+                 };
 
                 if (chessboard[y][x].type === 'EMPTY') {
                     possibleMoves.push({ x, y });
@@ -270,19 +283,55 @@ const getPossibleMoves_KNIGHT = (chessboard: ChessPieceType[][], selectedPiece: 
     if (!selectedPiece || selectedPiece.piece.type !== 'KNIGHT') return [];
 
     const possibleMoves: TileIndex[] = [];
-    const {x, y} = selectedPiece.tileIndex;
+    const { x, y } = selectedPiece.tileIndex;
     //up
-    if(chessboard[y-2] && chessboard[y-2][x-1] && chessboard[y-2][x-1].side !== selectedPiece.piece.side) possibleMoves.push({y: y-2, x: x-1});
-    if(chessboard[y-2] && chessboard[y-2][x+1] && chessboard[y-2][x+1].side !== selectedPiece.piece.side) possibleMoves.push({y: y-2, x: x+1});
+    if (chessboard[y - 2] &&
+        chessboard[y - 2][x - 1] &&
+        chessboard[y - 2][x - 1].side !== selectedPiece.piece.side) {
+        possibleMoves.push({ y: y - 2, x: x - 1 });
+    }
+
+    if (chessboard[y - 2] &&
+        chessboard[y - 2][x + 1] &&
+        chessboard[y - 2][x + 1].side !== selectedPiece.piece.side) {
+        possibleMoves.push({ y: y - 2, x: x + 1 });
+    }
     //down
-    if(chessboard[y+2] && chessboard[y+2][x-1] && chessboard[y+2][x-1].side !== selectedPiece.piece.side) possibleMoves.push({y: y+2, x: x-1});
-    if(chessboard[y+2] && chessboard[y+2][x+1] && chessboard[y+2][x+1].side !== selectedPiece.piece.side) possibleMoves.push({y: y+2, x: x+1});
+    if (chessboard[y + 2] &&
+        chessboard[y + 2][x - 1] &&
+        chessboard[y + 2][x - 1].side !== selectedPiece.piece.side) {
+        possibleMoves.push({ y: y + 2, x: x - 1 });
+    }
+
+    if (chessboard[y + 2] &&
+        chessboard[y + 2][x + 1] &&
+        chessboard[y + 2][x + 1].side !== selectedPiece.piece.side) {
+        possibleMoves.push({ y: y + 2, x: x + 1 });
+    }
     //left
-    if(chessboard[y+1] && chessboard[y+1][x-2] && chessboard[y+1][x-2].side !== selectedPiece.piece.side) possibleMoves.push({y: y+1, x: x-2});
-    if(chessboard[y-1] && chessboard[y-1][x-2] && chessboard[y-1][x-2].side !== selectedPiece.piece.side) possibleMoves.push({y: y-1, x: x-2});
+    if (chessboard[y + 1] &&
+        chessboard[y + 1][x - 2] &&
+        chessboard[y + 1][x - 2].side !== selectedPiece.piece.side) {
+        possibleMoves.push({ y: y + 1, x: x - 2 });
+    }
+
+    if (chessboard[y - 1] &&
+        chessboard[y - 1][x - 2] &&
+        chessboard[y - 1][x - 2].side !== selectedPiece.piece.side) {
+        possibleMoves.push({ y: y - 1, x: x - 2 });
+    }
     //right
-    if(chessboard[y+1] && chessboard[y+1][x+2] && chessboard[y+1][x+2].side !== selectedPiece.piece.side) possibleMoves.push({y: y+1, x: x+2});
-    if(chessboard[y-1] && chessboard[y-1][x+2] && chessboard[y-1][x+2].side !== selectedPiece.piece.side) possibleMoves.push({y: y-1, x: x+2});
+    if (chessboard[y + 1] &&
+        chessboard[y + 1][x + 2] &&
+        chessboard[y + 1][x + 2].side !== selectedPiece.piece.side) {
+        possibleMoves.push({ y: y + 1, x: x + 2 });
+    }
+
+    if (chessboard[y - 1] &&
+        chessboard[y - 1][x + 2] &&
+        chessboard[y - 1][x + 2].side !== selectedPiece.piece.side) {
+        possibleMoves.push({ y: y - 1, x: x + 2 });
+    }
 
     return possibleMoves;
 }
