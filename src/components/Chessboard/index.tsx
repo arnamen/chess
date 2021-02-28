@@ -19,8 +19,6 @@ interface Props {
 }
 
 export default function Chessboard({chessboardData, currentPlayerTurn, onSelectPiece, highlightedTiles, selectedPiece, onMovePiece, checkInfo}: Props): ReactElement {
-
-    console.log(checkInfo)
     
     return (
         <div className={classes.Chessboard}>

@@ -39,14 +39,18 @@ interface State {
 
 class GameManager extends Component<Props, State> {
 
-    componentDidMount() {
-        this.props.createChessboard();
-        this.setState({
+    constructor(props: Props) {
+        super(props);
+        this.state = {
             currentPlayerTurn: 'WHITE',
             selectedPiece: null,
-            possibleMoves: []
-        });
+            possibleMoves: [],
+            checkInfo: null
+        };
+    }
 
+    componentDidMount() {
+        this.props.createChessboard();
     }
 
     componentDidUpdate() {

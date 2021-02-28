@@ -212,7 +212,6 @@ export const updateChessboardOneTile = (tileIndex: TileIndex, newTileValue: Ches
 }
 
 export const chessboardMakeMove = (tileFrom: TileIndex, tileTo: TileIndex) => {
-  console.log({ tileFrom, tileTo })
   return typedAction('chessboard/makeMove', { tileFrom, tileTo });
 }
 
