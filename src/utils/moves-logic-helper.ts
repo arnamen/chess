@@ -65,6 +65,9 @@ export const getPossibleMoves = (chessboard: ChessPieceType[][], selectedPiece: 
         case 'KNIGHT':
             possibleMoves = getPossibleMoves_KNIGHT(chessboard, selectedPiece);
             break;
+        case 'ROOK':
+            possibleMoves = getPossibleMoves_ROOK(chessboard, selectedPiece);
+            break;
         default:
             break;
     }
@@ -175,9 +178,9 @@ const getPossibleMoves_BISHOP = (chessboard: ChessPieceType[][], selectedPiece: 
             while (x < 8 && y >= 0) {
                 //skip first iteration
                 //because it is tile with current figure on it
-                if (x === selectedPiece.tileIndex.x && y === selectedPiece.tileIndex.y) { 
-                    x++; y--; 
-                    continue 
+                if (x === selectedPiece.tileIndex.x && y === selectedPiece.tileIndex.y) {
+                    x++; y--;
+                    continue
                 };
 
                 if (chessboard[y][x].type === 'EMPTY') {
@@ -208,9 +211,9 @@ const getPossibleMoves_BISHOP = (chessboard: ChessPieceType[][], selectedPiece: 
 
                 //skip first iteration
                 //because it is tile with current figure on it
-                if (x === selectedPiece.tileIndex.x && y === selectedPiece.tileIndex.y) { 
-                    x--; y++; 
-                    continue; 
+                if (x === selectedPiece.tileIndex.x && y === selectedPiece.tileIndex.y) {
+                    x--; y++;
+                    continue;
                 };
 
                 if (chessboard[y][x].type === 'EMPTY') {
@@ -241,10 +244,10 @@ const getPossibleMoves_BISHOP = (chessboard: ChessPieceType[][], selectedPiece: 
 
                 //skip first iteration
                 //because it is tile with current figure on it
-                if (x === selectedPiece.tileIndex.x && y === selectedPiece.tileIndex.y) { 
-                    x++; y++; 
+                if (x === selectedPiece.tileIndex.x && y === selectedPiece.tileIndex.y) {
+                    x++; y++;
                     continue;
-                 };
+                };
 
                 if (chessboard[y][x].type === 'EMPTY') {
                     possibleMoves.push({ x, y });
@@ -272,8 +275,6 @@ const getPossibleMoves_BISHOP = (chessboard: ChessPieceType[][], selectedPiece: 
     if (movesUpperRight) possibleMoves.push(...movesUpperRight)
     if (movesLowerLeft) possibleMoves.push(...movesLowerLeft)
     if (movesLowerRight) possibleMoves.push(...movesLowerRight)
-
-    console.log(possibleMoves)
 
     return possibleMoves;
 }
@@ -335,3 +336,101 @@ const getPossibleMoves_KNIGHT = (chessboard: ChessPieceType[][], selectedPiece: 
 
     return possibleMoves;
 }
+
+const getPossibleMoves_ROOK = (chessboard: ChessPieceType[][], selectedPiece: SelectedPiece): TileIndex[] => {
+
+    const possibleMoves: TileIndex[] = [];
+
+    function getPossibleMoves_ROOK_up(chessboard: ChessPieceType[][], selectedPiece: SelectedPiece): TileIndex[] {
+        if (!selectedPiece) return [];
+
+        const possibleMoves: TileIndex[] = [];
+
+        let { x, y } = selectedPiece.tileIndex;
+        y--; //move index so we won't check tile on which selected piece is located
+        while (chessboard[y] &&
+            chessboard[y][x].side !== selectedPiece.piece.side) {
+            possibleMoves.push({ x, y });
+            //end moves check if there is an opponent piece on tile
+            if (chessboard[y][x].side !== 'NONE') return possibleMoves;
+            y--;
+        }
+
+        return possibleMoves;
+
+    }
+
+    function getPossibleMoves_ROOK_down(chessboard: ChessPieceType[][], selectedPiece: SelectedPiece): TileIndex[] {
+        if (!selectedPiece) return [];
+
+        const possibleMoves: TileIndex[] = [];
+
+        let { x, y } = selectedPiece.tileIndex;
+        y++;
+        while (chessboard[y] &&
+            chessboard[y][x].side !== selectedPiece.piece.side) {
+            possibleMoves.push({ x, y });
+            //end moves check if there is an opponent piece on tile
+            if (chessboard[y][x].side !== 'NONE') return possibleMoves;
+            y++;
+        }
+
+        return possibleMoves;
+
+    }
+
+    function getPossibleMoves_ROOK_left(chessboard: ChessPieceType[][], selectedPiece: SelectedPiece): TileIndex[] {
+        if (!selectedPiece) return [];
+
+        const possibleMoves: TileIndex[] = [];
+
+        let { x, y } = selectedPiece.tileIndex;
+        x--;
+        while (chessboard[y][x] &&
+            chessboard[y][x].side !== selectedPiece.piece.side) {
+            possibleMoves.push({ x, y });
+            //end moves check if there is an opponent piece on tile
+            if (chessboard[y][x].side !== 'NONE') return possibleMoves;
+            x--;
+        }
+
+        return possibleMoves;
+
+    }
+
+    function getPossibleMoves_ROOK_right(chessboard: ChessPieceType[][], selectedPiece: SelectedPiece): TileIndex[] {
+        if (!selectedPiece) return [];
+
+        const possibleMoves: TileIndex[] = [];
+
+        let { x, y } = selectedPiece.tileIndex;
+        x++;
+        while (chessboard[y][x] &&
+            chessboard[y][x].side !== selectedPiece.piece.side) {
+            possibleMoves.push({ x, y });
+            //end moves check if there is an opponent piece on tile
+            if (chessboard[y][x].side !== 'NONE') return possibleMoves;
+            x++;
+        }
+
+        return possibleMoves;
+
+    }
+
+    const movesLeft = getPossibleMoves_ROOK_left(chessboard, selectedPiece);
+    const movesRight = getPossibleMoves_ROOK_right(chessboard, selectedPiece);
+    const movesUp = getPossibleMoves_ROOK_up(chessboard, selectedPiece);
+    const movesDown = getPossibleMoves_ROOK_down(chessboard, selectedPiece);
+
+    possibleMoves.push(...movesLeft, ...movesRight, ...movesUp, ...movesDown);
+    return possibleMoves;
+}
+
+/* const getPossibleMoves_QUEEN = (chessboard: ChessPieceType[][], selectedPiece: SelectedPiece): TileIndex[] => {
+    const possibleMoves:TileIndex[] = [];
+
+    possibleMoves.push(...getPossibleMoves_BISHOP(chessboard, selectedPiece));
+    // possibleMoves.push(...getPossibleMoves_BISHOP(chessboard, selectedPiece));
+
+    return possibleMoves;
+} */
