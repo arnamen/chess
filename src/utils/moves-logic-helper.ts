@@ -68,6 +68,9 @@ export const getPossibleMoves = (chessboard: ChessPieceType[][], selectedPiece: 
         case 'ROOK':
             possibleMoves = getPossibleMoves_ROOK(chessboard, selectedPiece);
             break;
+        case 'QUEEN':
+            possibleMoves = getPossibleMoves_QUEEN(chessboard, selectedPiece);
+            break;
         default:
             break;
     }
@@ -129,10 +132,12 @@ const getPossibleMoves_PAWN = (chessboard: ChessPieceType[][], selectedPiece: Se
 }
 
 const getPossibleMoves_BISHOP = (chessboard: ChessPieceType[][], selectedPiece: SelectedPiece): TileIndex[] => {
-    if (!selectedPiece || selectedPiece.piece.type !== 'BISHOP') return [];
+    if (!selectedPiece ||
+        (selectedPiece.piece.type !== 'BISHOP' &&
+            selectedPiece.piece.type !== 'QUEEN')
+    ) return [];
 
     const possibleMoves: TileIndex[] = [];
-
     //to the upper left
     function getPossibleMoves_BISHOP_upperLeft(chessboard: ChessPieceType[][], selectedPiece: SelectedPiece) {
 
@@ -339,6 +344,11 @@ const getPossibleMoves_KNIGHT = (chessboard: ChessPieceType[][], selectedPiece: 
 
 const getPossibleMoves_ROOK = (chessboard: ChessPieceType[][], selectedPiece: SelectedPiece): TileIndex[] => {
 
+    if (!selectedPiece ||
+        (selectedPiece.piece.type !== 'BISHOP' &&
+            selectedPiece.piece.type !== 'QUEEN')
+    ) return [];
+
     const possibleMoves: TileIndex[] = [];
 
     function getPossibleMoves_ROOK_up(chessboard: ChessPieceType[][], selectedPiece: SelectedPiece): TileIndex[] {
@@ -426,11 +436,12 @@ const getPossibleMoves_ROOK = (chessboard: ChessPieceType[][], selectedPiece: Se
     return possibleMoves;
 }
 
-/* const getPossibleMoves_QUEEN = (chessboard: ChessPieceType[][], selectedPiece: SelectedPiece): TileIndex[] => {
-    const possibleMoves:TileIndex[] = [];
-
+const getPossibleMoves_QUEEN = (chessboard: ChessPieceType[][], selectedPiece: SelectedPiece): TileIndex[] => {
+    const possibleMoves: TileIndex[] = [];
+    //since queen has the same moves as rook and bishop combined
+    //we can just merge their moves
+    possibleMoves.push(...getPossibleMoves_ROOK(chessboard, selectedPiece));
     possibleMoves.push(...getPossibleMoves_BISHOP(chessboard, selectedPiece));
-    // possibleMoves.push(...getPossibleMoves_BISHOP(chessboard, selectedPiece));
 
     return possibleMoves;
-} */
+}
