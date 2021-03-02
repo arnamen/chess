@@ -12,7 +12,11 @@ export interface CheckInfo {
     king: SelectedPiece | null,
     threatingPiece: SelectedPiece
 }
-//will be verified if there check for king of corresponding side
+/**
+ * @param {ChessPieceType[][]}  chessboard - current chessboard
+ * @param {'WHITE' | 'BLACK'} playerSide - current player turn (will be checked if there is a check to current player's king)
+ * @return {CheckInfo | null} information about what figure causes check or null
+ */
 export const isCheck = (chessboard: ChessPieceType[][], playerSide: 'WHITE' | 'BLACK'): CheckInfo | null => {
     //find king position on board
     let king: SelectedPiece | null = null;
@@ -58,6 +62,12 @@ export const isCheck = (chessboard: ChessPieceType[][], playerSide: 'WHITE' | 'B
 
 }
 
+
+/**
+ * @param {ChessPieceType[][]}  chessboard - current chessboard
+ * @param {SelectedPiece} selectedPiece - peice which player want to move
+ * @return {TileIndex[]} array of possible moves for selected piece
+ */
 export const getPossibleMoves = (chessboard: ChessPieceType[][], selectedPiece: SelectedPiece): TileIndex[] => {
     if (!selectedPiece) return [];
     let possibleMoves: TileIndex[] = [];
