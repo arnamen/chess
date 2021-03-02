@@ -71,6 +71,9 @@ export const getPossibleMoves = (chessboard: ChessPieceType[][], selectedPiece: 
         case 'QUEEN':
             possibleMoves = getPossibleMoves_QUEEN(chessboard, selectedPiece);
             break;
+        case 'KING':
+            possibleMoves = getPossibleMoves_KING(chessboard, selectedPiece);
+            break;
         default:
             break;
     }
@@ -444,4 +447,51 @@ const getPossibleMoves_QUEEN = (chessboard: ChessPieceType[][], selectedPiece: S
     possibleMoves.push(...getPossibleMoves_BISHOP(chessboard, selectedPiece));
 
     return possibleMoves;
+}
+
+const getPossibleMoves_KING = (chessboard: ChessPieceType[][], selectedPiece: SelectedPiece): TileIndex[] => {
+
+    if (!selectedPiece || selectedPiece.piece.type !== 'KING') return [];
+
+    const possibleMoves: TileIndex[] = [];
+    const { x, y } = selectedPiece.tileIndex;
+
+    if (chessboard[y - 1] &&
+        chessboard[y - 1][x].side !== selectedPiece.piece.side)
+        possibleMoves.push({ x, y: y - 1 })
+
+    if (chessboard[y - 1] &&
+        chessboard[y - 1][x - 1] &&
+        chessboard[y - 1][x - 1].side !== selectedPiece.piece.side)
+        possibleMoves.push({ x: x - 1, y: y - 1 })
+
+    if (chessboard[y + 1] &&
+        chessboard[y + 1][x - 1] &&
+        chessboard[y + 1][x - 1].side !== selectedPiece.piece.side)
+        possibleMoves.push({ x: x - 1, y: y + 1 })
+
+    if (chessboard[y + 1] &&
+        chessboard[y + 1][x].side !== selectedPiece.piece.side)
+        possibleMoves.push({ x, y: y + 1 })
+
+    if (chessboard[y + 1] &&
+        chessboard[y + 1][x + 1] &&
+        chessboard[y + 1][x + 1].side !== selectedPiece.piece.side)
+        possibleMoves.push({ x: x + 1, y: y + 1 })
+
+    if (chessboard[y][x + 1] &&
+        chessboard[y][x + 1].side !== selectedPiece.piece.side)
+        possibleMoves.push({ x: x + 1, y })
+
+    if (chessboard[y][x - 1] &&
+        chessboard[y][x - 1].side !== selectedPiece.piece.side)
+        possibleMoves.push({ x: x - 1, y })
+
+    if (chessboard[y - 1] &&
+        chessboard[y - 1][x + 1] &&
+        chessboard[y - 1][x + 1].side !== selectedPiece.piece.side)
+        possibleMoves.push({ x: x + 1, y: y - 1 })
+
+    return possibleMoves;
+
 }
