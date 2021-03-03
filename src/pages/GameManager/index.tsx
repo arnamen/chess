@@ -3,6 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 import Tile, { TileIndex } from '../../components/Tile';
 import ChessPiece from '../../components/ChessPiece';
 import { updateChessboard, updateChessboardOneTile, createChessboard, WHITE, BLACK, ChessPieceType, SelectedPiece, chessboardMakeMove } from '../../redux/reducers/chessboardReducer/types';
+import { makeTempMove } from '../../utils/moves-test-move';
 import { RootState } from '../../redux/index';
 import Chessboard from '../../components/Chessboard';
 import Spinner from '../../components/Spinner';
@@ -82,19 +83,26 @@ class GameManager extends Component<Props, State> {
             //if there is check to the king. 
             //Will return null if there is no check, else will return detailed data
             const checkInfo = isCheck(this.props.chessboard, this.state.currentPlayerTurn);
+            
             if (checkInfo) {
-                this.setState({
-                    checkInfo: checkInfo
-                })
+                const tempChessboard = makeTempMove(this.props.chessboard, this.state.selectedPiece?.tileIndex, tileIndex);
+                //check if check remains after palyer makes move
+                const tempCheckInfo = isCheck(tempChessboard, this.state.currentPlayerTurn);
+                //if check remains notify player about check
+                if (tempCheckInfo !== null) {
+                    this.setState({
+                        checkInfo: checkInfo
+                    })
+                    return;
+                }
             }
-            else {
-                this.props.chessboardMakeMove(this.state.selectedPiece?.tileIndex, tileIndex);
-                this.setState({
-                    selectedPiece: null,
-                    possibleMoves: [],
-                    currentPlayerTurn: this.state.currentPlayerTurn === 'WHITE' ? 'BLACK' : 'WHITE'
-                })
-            }
+            this.props.chessboardMakeMove(this.state.selectedPiece?.tileIndex, tileIndex);
+            this.setState({
+                selectedPiece: null,
+                possibleMoves: [],
+                currentPlayerTurn: this.state.currentPlayerTurn === 'WHITE' ? 'BLACK' : 'WHITE',
+                checkInfo: null
+            })
         }
     }
 
