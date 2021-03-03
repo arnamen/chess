@@ -1,4 +1,6 @@
 .Chessboard {
+    position: relative;
+    padding: 1vw;
     width: 40vw;
     height: 40vw;
     max-width: 560px;
