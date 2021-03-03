@@ -24,7 +24,6 @@ interface StyledBorderCornerProps {
 };
 
 const BorderTile = styled.div<StyledTileProps>`
-    background: URL(${woodenBorder}) center center/cover no-repeat;
     width: ${props => props.width ? props.width : 5}vw;
     height: ${props => props.height ? props.height : 5}vw;
     max-width: 70px;
@@ -40,10 +39,10 @@ const BorderTile = styled.div<StyledTileProps>`
 
 const BorderCorner = styled.div<StyledBorderCornerProps>`
     position: absolute;
-    top: ${props => props.topLeft || props.topRight ? 0 : 'auto'}px;
-    bottom: ${props => props.bottomLeft || props.bottomRight ? 0 : 'auto'}px;
-    left: ${props => props.topLeft || props.bottomLeft ? 0 : 'auto'}px;
-    right: ${props => props.topRight || props.bottomRight ? 0 : 'auto'}px;
+    top: ${props => props.topLeft || props.topRight ? '0px' : 'auto'};
+    bottom: ${props => props.bottomLeft || props.bottomRight ? '0px' : 'auto'};
+    left: ${props => props.topLeft || props.bottomLeft ? '0px' : 'auto'};
+    right: ${props => props.topRight || props.bottomRight ? '0px' : 'auto'};
     background: URL(${woodenBorder}) center center/cover no-repeat;
     width: 1vw;
     height: 1vw;
@@ -56,36 +55,42 @@ const BorderRowTop = styled.div`
     position: absolute;
     top: 0;
     left: 1vw;
-    width: calc(100% - 10vw);
-    display: grid;
-    grid-template-columns: repeat(8, 1fr);
+    width: calc(100% - 2vw);
+    display: flex;
+    justify-content: center;
+    background: URL(${woodenBorder}) center center/cover repeat;
 `
 
 const BorderRowBottom = styled.div`
-position: absolute;
-bottom: 0;
-left: 1vw;
-width: calc(100% - 10vw);
-display: grid;
-grid-template-columns: repeat(8, 1fr);
+    position: absolute;
+    bottom: 0;
+    left: 1vw;
+    width: calc(100% - 2vw);
+    display: flex;
+    justify-content: center;
+    background: URL(${woodenBorder}) center center/cover repeat;
 `
 
 const BorderColumnLeft = styled.div`
     position: absolute;
     top: 1vw;
     left: 0;
-    height: calc(100% - 10vw);
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
+    padding-top: 0.5vw;
+    height: calc(100% - 2vw);
+    display: flex;
+    flex-direction: column;
+    background: URL(${woodenBorder}) center center/cover repeat;
 `
 
 const BorderColumnRight = styled.div`
     position: absolute;
     top: 1vw;
     right: 0;
-    height: calc(100% - 10vw);
-    display: grid;
-    grid-template-columns: repeat(1, 1fr);
+    padding-top: 0.5vw;
+    height: calc(100% - 2vw);
+    display: flex;
+    flex-direction: column;
+    background: URL(${woodenBorder}) center center/cover repeat;
 `
 interface Props {
     chessboardData: ChessPieceType[][],

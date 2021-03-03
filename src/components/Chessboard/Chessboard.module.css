@@ -1,11 +1,12 @@
 .Chessboard {
     position: relative;
-    padding: 1vw;
+    padding: 1.5vw;
     width: 40vw;
     height: 40vw;
     max-width: 560px;
     max-height: 560px;
     overflow: hidden;
     display: grid;
+    background-color: #b58863;
     grid-template-columns: repeat(8, 1fr);
 }
