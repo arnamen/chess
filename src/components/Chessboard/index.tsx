@@ -1,97 +1,20 @@
 import React, { ReactElement } from 'react'
-import { v4 } from 'uuid';
-import styled from 'styled-components';
 
 import Tile, { TileIndex } from '../Tile';
+import ChessboardBorderTop from './ChessboardBorderTop';
+import ChessboardBorderBottom from './ChessboardBorderBottom';
+import ChessboardBorderLeft from './ChessboardBorderLeft';
+import ChessboardBorderRight from './ChessboardBorderRight';
+import ChessboardCorner from './ChessboardCorner';
+import ChessboardBorderTile from './ChessboardBorderTile';
+
 import { ChessPieceType, SelectedPiece } from '../../redux/reducers/chessboardReducer/types';
 
 import { CheckInfo } from '../../utils/moves-logic-helper';
 
-import woodenBorder from '../../assets/chessboard/borders/textures/wood-seamless.jpg';
-
 import classes from './Chessboard.module.css';
 
-interface StyledTileProps {
-    width?: number,
-    height?: number
-};
 
-interface StyledBorderCornerProps {
-    topLeft?: boolean,
-    topRight?: boolean,
-    bottomLeft?: boolean,
-    bottomRight?: boolean,
-};
-
-const BorderTile = styled.div<StyledTileProps>`
-    width: ${props => props.width ? props.width : 5}vw;
-    height: ${props => props.height ? props.height : 5}vw;
-    max-width: 70px;
-    max-height: 70px;
-    display: flex;
-    justify-content: center;
-    font-weight: 700;
-    font-size: 15px;
-    align-items: center;
-    box-sizing:border-box;
-    position: relative;
-`;
-
-const BorderCorner = styled.div<StyledBorderCornerProps>`
-    position: absolute;
-    top: ${props => props.topLeft || props.topRight ? '0px' : 'auto'};
-    bottom: ${props => props.bottomLeft || props.bottomRight ? '0px' : 'auto'};
-    left: ${props => props.topLeft || props.bottomLeft ? '0px' : 'auto'};
-    right: ${props => props.topRight || props.bottomRight ? '0px' : 'auto'};
-    background: URL(${woodenBorder}) center center/cover no-repeat;
-    width: 1vw;
-    height: 1vw;
-    max-width: 70px;
-    max-height: 70px;
-    box-sizing:border-box;
-`;
-
-const BorderRowTop = styled.div`
-    position: absolute;
-    top: 0;
-    left: 1vw;
-    width: calc(100% - 2vw);
-    display: flex;
-    justify-content: center;
-    background: URL(${woodenBorder}) center center/cover repeat;
-`
-
-const BorderRowBottom = styled.div`
-    position: absolute;
-    bottom: 0;
-    left: 1vw;
-    width: calc(100% - 2vw);
-    display: flex;
-    justify-content: center;
-    background: URL(${woodenBorder}) center center/cover repeat;
-`
-
-const BorderColumnLeft = styled.div`
-    position: absolute;
-    top: 1vw;
-    left: 0;
-    padding-top: 0.5vw;
-    height: calc(100% - 2vw);
-    display: flex;
-    flex-direction: column;
-    background: URL(${woodenBorder}) center center/cover repeat;
-`
-
-const BorderColumnRight = styled.div`
-    position: absolute;
-    top: 1vw;
-    right: 0;
-    padding-top: 0.5vw;
-    height: calc(100% - 2vw);
-    display: flex;
-    flex-direction: column;
-    background: URL(${woodenBorder}) center center/cover repeat;
-`
 interface Props {
     chessboardData: ChessPieceType[][],
     currentPlayerTurn: 'WHITE' | 'BLACK',
@@ -111,23 +34,23 @@ export default function Chessboard({ chessboardData, currentPlayerTurn, onSelect
     const borderBottom: any[] = [];
     const letters = 'abcdefgh';
     for (let i = 0; i < 8; i++) {
-        borderLeft.push(<BorderTile width={1} key={i}><span>{i}</span></BorderTile>);
-        borderRight.push(<BorderTile width={1} key={i}/>);
-        borderTop.push(<BorderTile height={1} key={i} />);
-        borderBottom.push(<BorderTile height={1} key={i}><span>{letters.substr(i, 1)}</span></BorderTile>);
+        borderLeft.push(<ChessboardBorderTile width={1} key={i}><span>{i}</span></ChessboardBorderTile>);
+        borderRight.push(<ChessboardBorderTile width={1} key={i}/>);
+        borderTop.push(<ChessboardBorderTile height={1} key={i} />);
+        borderBottom.push(<ChessboardBorderTile height={1} key={i}><span>{letters.substr(i, 1)}</span></ChessboardBorderTile>);
     }
 
     return (
         <div className={classes.Chessboard}>
 
-            <BorderRowTop>{borderTop}</BorderRowTop>
-            <BorderColumnLeft>{borderLeft}</BorderColumnLeft>
-            <BorderColumnRight>{borderRight}</BorderColumnRight>
-            <BorderRowBottom>{borderBottom}</BorderRowBottom>
-            <BorderCorner topLeft/>
-            <BorderCorner topRight/>
-            <BorderCorner bottomLeft/>
-            <BorderCorner bottomRight/>
+            <ChessboardBorderTop>{borderTop}</ChessboardBorderTop>
+            <ChessboardBorderBottom>{borderLeft}</ChessboardBorderBottom>
+            <ChessboardBorderLeft>{borderRight}</ChessboardBorderLeft>
+            <ChessboardBorderRight>{borderBottom}</ChessboardBorderRight>
+            <ChessboardCorner topLeft/>
+            <ChessboardCorner topRight/>
+            <ChessboardCorner bottomLeft/>
+            <ChessboardCorner bottomRight/>
             {chessboardData.map((chessboardLine, y) => {
 
                 return chessboardLine.map((piece, x) => {
