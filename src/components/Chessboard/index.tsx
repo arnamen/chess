@@ -10,7 +10,7 @@ import ChessboardBorderTile from './ChessboardBorderTile';
 
 import { ChessPieceType, SelectedPiece } from '../../redux/reducers/chessboardReducer/types';
 
-import { CheckInfo } from '../../utils/moves-logic-helper';
+import { CheckInfo } from '../../utils/checkmate-helper';
 
 import classes from './Chessboard.module.css';
 

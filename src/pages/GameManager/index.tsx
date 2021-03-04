@@ -8,8 +8,8 @@ import { RootState } from '../../redux/index';
 import Chessboard from '../../components/Chessboard';
 import Spinner from '../../components/Spinner';
 
-import { getPossibleMoves, isCheck, CheckInfo } from '../../utils/moves-logic-helper';
-
+import { getPossibleMoves } from '../../utils/moves-logic-helper';
+import { isCheck, CheckInfo } from '../../utils/checkmate-helper';
 const mapStateToProps = (state: RootState) => ({
     chessboard: state.chessboard.chessboard,
 })
