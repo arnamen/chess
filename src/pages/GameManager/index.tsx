@@ -66,7 +66,7 @@ class GameManager extends Component<Props, State> {
             const chessboard = this.props.chessboard;
             let possibleMoves: TileIndex[] = [];
             if (chessboard)
-                possibleMoves = getPossibleMoves(chessboard, selectedPiece)
+                possibleMoves = getPossibleMoves(chessboard, selectedPiece, this.state.currentPlayerTurn)
 
             this.setState({
                 selectedPiece: {
