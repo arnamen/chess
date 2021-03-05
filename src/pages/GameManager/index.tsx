@@ -1,5 +1,7 @@
 import React, { Component, ReactElement } from 'react'
 import { connect, ConnectedProps } from 'react-redux';
+import {v4} from 'uuid';
+
 import Tile, { TileIndex } from '../../components/Tile';
 import ChessPiece from '../../components/ChessPiece';
 import { updateChessboard, updateChessboardOneTile, createChessboard, WHITE, BLACK, ChessPieceType, SelectedPiece, chessboardMakeMove } from '../../redux/reducers/chessboardReducer/types';
@@ -8,8 +10,9 @@ import { RootState } from '../../redux/index';
 import Chessboard from '../../components/Chessboard';
 import Spinner from '../../components/Spinner';
 
+import {findPieceOnBoard} from '../../utils/find-piece-on-board';
 import { getPossibleMoves } from '../../utils/moves-logic-helper';
-import { isCheck, CheckInfo } from '../../utils/checkmate-helper';
+import { isCheck, CheckInfo, isCheckmate } from '../../utils/checkmate-helper';
 const mapStateToProps = (state: RootState) => ({
     chessboard: state.chessboard.chessboard,
 })
@@ -55,6 +58,14 @@ class GameManager extends Component<Props, State> {
     }
 
     componentDidUpdate() {
+        // console.log('player side: ' + this.state.currentPlayerTurn);
+        let checkmateInfo = null;
+        if(this.props.chessboard) {
+            const enemyKing = this.state.currentPlayerTurn === 'WHITE' ? WHITE.KING : BLACK.KING;
+            const [enemyKingData] = findPieceOnBoard(this.props.chessboard, enemyKing);
+            checkmateInfo = isCheckmate(this.props.chessboard, enemyKingData);
+            if(checkmateInfo) console.log(checkmateInfo)
+        }
 
     }
 
@@ -103,6 +114,7 @@ class GameManager extends Component<Props, State> {
                 currentPlayerTurn: this.state.currentPlayerTurn === 'WHITE' ? 'BLACK' : 'WHITE',
                 checkInfo: null
             })
+            
         }
     }
 

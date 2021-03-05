@@ -12,7 +12,7 @@ import {getPossibleMoves_KNIGHT} from './moves-knight';
  * @param {SelectedPiece} selectedPiece - peice which player want to move
  * @return {TileIndex[]} array of possible moves for selected piece
  */
-export const getPossibleMoves = (chessboard: ChessPieceType[][], selectedPiece: SelectedPiece, currentPlayerTurn: 'WHITE' | 'BLACK' | null = null): TileIndex[] => {
+export const getPossibleMoves = (chessboard: ChessPieceType[][], selectedPiece: SelectedPiece, currentPlayerTurn: 'WHITE' | 'BLACK' | 'NONE' | null = null): TileIndex[] => {
     if (!selectedPiece) return [];
     let possibleMoves: TileIndex[] = [];
     switch (selectedPiece?.piece.type) {
@@ -46,7 +46,7 @@ export const getPossibleMoves = (chessboard: ChessPieceType[][], selectedPiece: 
     return possibleMoves;
 }
 
-export const validateMoves = (chessboard: ChessPieceType[][], selectedPiece: SelectedPiece, moves: TileIndex[], currentPlayerTurn: 'WHITE' | 'BLACK' | null = null): TileIndex[] => {
+export const validateMoves = (chessboard: ChessPieceType[][], selectedPiece: SelectedPiece, moves: TileIndex[], currentPlayerTurn: 'WHITE' | 'BLACK' | 'NONE' | null = null): TileIndex[] => {
 
     if(!selectedPiece) return [];
 
@@ -59,7 +59,7 @@ export const validateMoves = (chessboard: ChessPieceType[][], selectedPiece: Sel
     }
 }
 
-const validateMoves_KING = (chessboard: ChessPieceType[][], selectedPiece: SelectedPiece, moves: TileIndex[], currentPlayerTurn: 'WHITE' | 'BLACK' | null = null): TileIndex[] => {
+const validateMoves_KING = (chessboard: ChessPieceType[][], selectedPiece: SelectedPiece, moves: TileIndex[], currentPlayerTurn: 'WHITE' | 'BLACK' | 'NONE' | null = null): TileIndex[] => {
     if(!selectedPiece) return [];
     interface PieceOnBoard {
         piece: ChessPieceType,
@@ -87,12 +87,12 @@ const validateMoves_KING = (chessboard: ChessPieceType[][], selectedPiece: Selec
 
     //check if there are moves for selectedPiece that are not blocked by opponent pieces
     moves = moves.filter(kingMove => {
-        const threatingPieces = opponentPiecesOnBoard.filter(opponentPiece => {
+        const threateningPieces = opponentPiecesOnBoard.filter(opponentPiece => {
             return opponentPiece.possibleMoves.find(possibleMove => possibleMove.x === kingMove.x && possibleMove.y === kingMove.y);
         })
-        //if there are no threating pieces for the selectedPiece 
+        //if there are no threatening pieces for the selectedPiece 
         //on current possible move tileIndex
-        if(threatingPieces.length === 0) return true;
+        if(threateningPieces.length === 0) return true;
         return false;
     })
 

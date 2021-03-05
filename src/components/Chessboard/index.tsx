@@ -62,7 +62,7 @@ export default function Chessboard({ chessboardData, currentPlayerTurn, onSelect
                         isHighlighted={!!highlightedTiles?.find(highlightedTile => highlightedTile.x === x && highlightedTile.y === y)}
                         isSelected={selectedPiece?.tileIndex.x === x && selectedPiece.tileIndex.y === y}
                         isImportant={checkInfo?.king?.tileIndex.y === y && checkInfo?.king?.tileIndex.x === x}
-                        isDanger={checkInfo?.threatingPiece?.tileIndex.y === y && checkInfo?.threatingPiece?.tileIndex.x === x}
+                        isDanger={checkInfo?.threateningPiece?.tileIndex.y === y && checkInfo?.threateningPiece?.tileIndex.x === x}
                         onSelectPiece={onSelectPiece}
                         onMovePiece={onMovePiece}
                         key={`${y * 8 + x}_${piece.side}_${piece.type}`}
