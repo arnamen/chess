@@ -46,7 +46,7 @@ export default function Chessboard({ chessboardData, currentPlayerTurn, onSelect
         setTimeout(function () {
             onClearMessage();
             setShowMessage(false);
-        }, 500);
+        }, 490);
     }
 
     const borderLeft: any[] = [];

@@ -32,7 +32,8 @@ interface State {
     possibleMoves: TileIndex[],
     checkInfo: CheckInfo | null,
     message?: string,
-    gameStarted: boolean
+    gameStarted: boolean,
+    gameFinished: boolean
 }
 
 //white - "+", black - "-"
@@ -52,7 +53,8 @@ class GameManager extends Component<Props, State> {
             selectedPiece: null,
             possibleMoves: [],
             checkInfo: null,
-            gameStarted: false
+            gameStarted: false,
+            gameFinished: false,
         };
     }
 
@@ -67,7 +69,12 @@ class GameManager extends Component<Props, State> {
             const enemyKing = this.state.currentPlayerTurn === 'WHITE' ? WHITE.KING : BLACK.KING;
             const [enemyKingData] = findPieceOnBoard(this.props.chessboard, enemyKing);
             checkmateInfo = isCheckmate(this.props.chessboard, enemyKingData);
-            if (checkmateInfo) console.log(checkmateInfo)
+            if (checkmateInfo && !this.state.gameFinished) {
+                this.setState({
+                    gameFinished: true,
+                    message: `Игра окончена. Победили ${this.state.currentPlayerTurn === 'BLACK' ? 'белые' : 'черные'}`
+                })
+            }
         }
 
     }
@@ -121,6 +128,18 @@ class GameManager extends Component<Props, State> {
         }
     }
 
+    onClearMessage() {
+
+        if(this.state.gameFinished) {
+            this.props.createChessboard();
+            return this.setState({
+                gameFinished: false,
+                message: undefined
+            })
+        }
+        return this.setState({message: undefined});
+    }
+
     render() {
 
         let chessboard: ReactElement = <Spinner />
@@ -133,7 +152,7 @@ class GameManager extends Component<Props, State> {
             checkInfo={this.state.checkInfo} //pass info about if there is check to the king
             onMovePiece={this.onMovePiece.bind(this)}
             message={this.state.message}
-            onClearMessage={() => this.setState({message: undefined})}>
+            onClearMessage={this.onClearMessage.bind(this)}>
             {!this.state.gameStarted && <OrangeButton onClick={() => this.setState({gameStarted: true})}>
                 <span>Player VS Player</span>
              </OrangeButton>}
