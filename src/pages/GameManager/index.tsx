@@ -1,9 +1,9 @@
-import React, { Component, ReactElement } from 'react'
+import { Component, ReactElement } from 'react'
 import { connect, ConnectedProps } from 'react-redux';
-import { v4 } from 'uuid';
 
-import Tile, { TileIndex } from '../../components/Tile';
-import { updateChessboard, updateChessboardOneTile, createChessboard, WHITE, BLACK, ChessPieceType, SelectedPiece, chessboardMakeMove } from '../../redux/reducers/chessboardReducer/types';
+import { TileIndex } from '../../components/Tile';
+import { updateChessboard, updateChessboardOneTile, createChessboard, WHITE, BLACK, SelectedPiece, chessboardMakeMove } from '../../redux/reducers/chessboardReducer/types';
+import  { Move, addMoveToLog, RemoveMoveFromLog } from '../../redux/reducers/movesLogReducer/types';
 import { makeTempMove } from '../../utils/moves-test-move';
 import { RootState } from '../../redux/index';
 import Chessboard from '../../components/Chessboard';
@@ -15,10 +15,11 @@ import { getPossibleMoves } from '../../utils/moves-logic-helper';
 import { isCheck, CheckInfo, isCheckmate } from '../../utils/checkmate-helper';
 const mapStateToProps = (state: RootState) => ({
     chessboard: state.chessboard.chessboard,
+    movesLog: state.movesLog.movesLog
 })
 
 const mapDispatchToProps = {
-    updateChessboard, updateChessboardOneTile, createChessboard, chessboardMakeMove
+    updateChessboard, updateChessboardOneTile, createChessboard, chessboardMakeMove, addMoveToLog, RemoveMoveFromLog
 }
 
 const connector = connect(mapStateToProps, mapDispatchToProps);

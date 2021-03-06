@@ -1,14 +1,25 @@
 import React, { Component } from 'react';
-import { connect } from 'react-redux'
+import { connect, ConnectedProps } from 'react-redux'
 import { RootState } from './redux';
-import { updateChessboard, updateChessboardOneTile } from './redux/reducers/chessboardReducer/types';
 import GameManager from './pages/GameManager';
+import { RemoveMoveFromLog } from './redux/reducers/movesLogReducer/types';
 import MovesLog from './components/MovesLog';
 import GameInfo from './components/GameInfo';
 
 import './App.css';
 
-interface Props {
+const mapStateToProps = (state: RootState) => ({
+  chessboard: state.chessboard.chessboard,
+  movesLog: state.movesLog.movesLog
+})
+
+const mapDispatchToProps = {
+  RemoveMoveFromLog
+}
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+const connector = connect(mapStateToProps, mapDispatchToProps);
+interface Props extends PropsFromRedux {
 
 }
 interface State {
@@ -22,7 +33,7 @@ export class App extends Component<Props, State> {
     return (
 
         <div className='App'>
-          <MovesLog />
+          <MovesLog moves={this.props.movesLog}/>
           <GameManager />
           <GameInfo />
         </div>
@@ -31,13 +42,4 @@ export class App extends Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: RootState) => ({
-  chessboard: state.chessboard.chessboard,
-  movesLog: state.movesLog.movesLog
-})
-
-const mapDispatchToProps = {
-  updateChessboard, updateChessboardOneTile
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(App)
+export default connector(App)

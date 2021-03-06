@@ -1,8 +1,13 @@
+import {ChessPieceType} from '../chessboardReducer/types';
+
 export type Point = {x: number, y: number}
 
 export interface Move {
+    gameStart: boolean,
+    gameEnd: boolean,
     oldPos: Point,
-    newPos: Point
+    newPos: Point,
+    chessboard: ChessPieceType[][]
 }
 
 export function typedAction<T extends string>(type: T): { type: T };

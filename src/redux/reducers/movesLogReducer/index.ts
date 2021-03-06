@@ -3,7 +3,13 @@ import {Reducer} from 'redux'
 import { actionTypes, StateInterface } from './types';
 
 const initialState: StateInterface = {
-    movesLog: [],
+    movesLog: [{
+        gameStart: true,
+        gameEnd: false,
+        oldPos: {x:0, y:0},
+        newPos: {x:1, y:1},
+        chessboard: []
+    }],
 }
 
 
