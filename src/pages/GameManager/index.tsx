@@ -1,16 +1,16 @@
 import React, { Component, ReactElement } from 'react'
 import { connect, ConnectedProps } from 'react-redux';
-import {v4} from 'uuid';
+import { v4 } from 'uuid';
 
 import Tile, { TileIndex } from '../../components/Tile';
-import ChessPiece from '../../components/ChessPiece';
 import { updateChessboard, updateChessboardOneTile, createChessboard, WHITE, BLACK, ChessPieceType, SelectedPiece, chessboardMakeMove } from '../../redux/reducers/chessboardReducer/types';
 import { makeTempMove } from '../../utils/moves-test-move';
 import { RootState } from '../../redux/index';
 import Chessboard from '../../components/Chessboard';
 import Spinner from '../../components/Spinner';
+import OrangeButton from '../../components/Chessboard/ChessboardModal/OrangeButton';
 
-import {findPieceOnBoard} from '../../utils/find-piece-on-board';
+import { findPieceOnBoard } from '../../utils/find-piece-on-board';
 import { getPossibleMoves } from '../../utils/moves-logic-helper';
 import { isCheck, CheckInfo, isCheckmate } from '../../utils/checkmate-helper';
 const mapStateToProps = (state: RootState) => ({
@@ -30,7 +30,8 @@ interface State {
     currentPlayerTurn: 'WHITE' | 'BLACK',
     selectedPiece: SelectedPiece,
     possibleMoves: TileIndex[],
-    checkInfo: CheckInfo | null
+    checkInfo: CheckInfo | null,
+    message?: string;
 }
 
 //white - "+", black - "-"
@@ -49,7 +50,7 @@ class GameManager extends Component<Props, State> {
             currentPlayerTurn: 'WHITE',
             selectedPiece: null,
             possibleMoves: [],
-            checkInfo: null
+            checkInfo: null,
         };
     }
 
@@ -60,11 +61,11 @@ class GameManager extends Component<Props, State> {
     componentDidUpdate() {
         // console.log('player side: ' + this.state.currentPlayerTurn);
         let checkmateInfo = null;
-        if(this.props.chessboard) {
+        if (this.props.chessboard) {
             const enemyKing = this.state.currentPlayerTurn === 'WHITE' ? WHITE.KING : BLACK.KING;
             const [enemyKingData] = findPieceOnBoard(this.props.chessboard, enemyKing);
             checkmateInfo = isCheckmate(this.props.chessboard, enemyKingData);
-            if(checkmateInfo) console.log(checkmateInfo)
+            if (checkmateInfo) console.log(checkmateInfo)
         }
 
     }
@@ -94,7 +95,7 @@ class GameManager extends Component<Props, State> {
             //if there is check to the king. 
             //Will return null if there is no check, else will return detailed data
             const checkInfo = isCheck(this.props.chessboard, this.state.currentPlayerTurn);
-            
+
             if (checkInfo) {
                 const tempChessboard = makeTempMove(this.props.chessboard, this.state.selectedPiece?.tileIndex, tileIndex);
                 //check if check remains after palyer makes move
@@ -114,11 +115,12 @@ class GameManager extends Component<Props, State> {
                 currentPlayerTurn: this.state.currentPlayerTurn === 'WHITE' ? 'BLACK' : 'WHITE',
                 checkInfo: null
             })
-            
+
         }
     }
 
     render() {
+
         let chessboard: ReactElement = <Spinner />
         if (this.props.chessboard !== null) chessboard = <Chessboard
             chessboardData={this.props.chessboard} //current state of chessboard
@@ -127,9 +129,16 @@ class GameManager extends Component<Props, State> {
             selectedPiece={this.state.selectedPiece} //Piece, selected py player
             highlightedTiles={this.state.possibleMoves} //tiles on which player able to move piece (calculated after piece is selected)
             checkInfo={this.state.checkInfo} //pass info about if there is check to the king
-            onMovePiece={this.onMovePiece.bind(this)} //when player clicked on highlighted tile
-
-        />;
+            onMovePiece={this.onMovePiece.bind(this)}
+            message={this.state.message}
+            onClearMessage={() => this.setState({message: undefined})}>
+            <OrangeButton onClick={() => { }}>
+                <span>Player VS Player</span>
+             </OrangeButton>
+             <OrangeButton onClick={() => this.setState({message: 'This mode currently unavailable'})}>
+                <span>Player VS AI</span>
+             </OrangeButton>
+        </Chessboard>;
 
         return (
             chessboard

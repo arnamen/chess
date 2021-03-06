@@ -1,3 +1,8 @@
+@font-face {
+  font-family: 'teletoon';
+  src: local('teletoon'), url('./assets/fonts/telelower.ttf') format('truetype');
+}
+
 body {
   margin: 0;
   padding: 0;

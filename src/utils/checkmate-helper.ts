@@ -33,7 +33,6 @@ interface PieceOnBoard {
 export const isCheckmate = (chessboard: ChessPieceType[][], king: SelectedPiece): CheckmateInfo | null => {
     if (!king) return null;
     const kingMoves = getPossibleMoves(chessboard, king, king.piece.side);
-    console.log(kingMoves)
     if(kingMoves.length > 0) return null; //if king able to move away - it is not a checkmate
 
     const opponentPiecesOnBoard: PieceOnBoard[] = [];

@@ -1,4 +1,4 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import { connect } from 'react-redux'
 import { RootState } from './redux';
 import { updateChessboard, updateChessboardOneTile } from './redux/reducers/chessboardReducer/types';
@@ -7,6 +7,7 @@ import MovesLog from './components/MovesLog';
 import GameInfo from './components/GameInfo';
 
 import './App.css';
+
 interface Props {
 
 }

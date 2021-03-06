@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useState, useEffect } from 'react'
 
 import Tile, { TileIndex } from '../Tile';
 import ChessboardBorderTop from './ChessboardBorderTop';
@@ -7,6 +7,8 @@ import ChessboardBorderLeft from './ChessboardBorderLeft';
 import ChessboardBorderRight from './ChessboardBorderRight';
 import ChessboardCorner from './ChessboardCorner';
 import ChessboardBorderTile from './ChessboardBorderTile';
+import ChessboardModal from './ChessboardModal';
+import ChessboardMessage from './ChessboardMessage';
 
 import { ChessPieceType, SelectedPiece } from '../../redux/reducers/chessboardReducer/types';
 
@@ -22,11 +24,30 @@ interface Props {
     selectedPiece?: SelectedPiece,
     onSelectPiece: (selectedPiece: SelectedPiece) => void,
     onMovePiece: (tileIndex: TileIndex) => void,
-    checkInfo: CheckInfo | null
+    onClearMessage:() => void,
+    checkInfo: CheckInfo | null,
+    message?: string,
+    children?: React.ReactNode
 
 }
 
-export default function Chessboard({ chessboardData, currentPlayerTurn, onSelectPiece, highlightedTiles, selectedPiece, onMovePiece, checkInfo }: Props): ReactElement {
+export default function Chessboard({ chessboardData, currentPlayerTurn, onSelectPiece, highlightedTiles, selectedPiece, onMovePiece, checkInfo, children, message, onClearMessage }: Props): ReactElement {
+
+    const [showMessage, setShowMessage] = useState(false);
+    const [messageClasses, setMessageClasses] = useState<string[]>([]);
+
+    useEffect(() => {
+        setMessageClasses(['slidein'])
+        setShowMessage(!!message);
+    }, [message]);
+
+    const hideMessage = () => {
+        setMessageClasses(['slideout'])
+        setTimeout(function () {
+            onClearMessage();
+            setShowMessage(false);
+        }, 500);
+    }
 
     const borderLeft: any[] = [];
     const borderRight: any[] = [];
@@ -35,7 +56,7 @@ export default function Chessboard({ chessboardData, currentPlayerTurn, onSelect
     const letters = 'abcdefgh';
     for (let i = 0; i < 8; i++) {
         borderLeft.push(<ChessboardBorderTile width={1} key={i}><span>{i}</span></ChessboardBorderTile>);
-        borderRight.push(<ChessboardBorderTile width={1} key={i}/>);
+        borderRight.push(<ChessboardBorderTile width={1} key={i} />);
         borderTop.push(<ChessboardBorderTile height={1} key={i} />);
         borderBottom.push(<ChessboardBorderTile height={1} key={i}><span>{letters.substr(i, 1)}</span></ChessboardBorderTile>);
     }
@@ -43,14 +64,6 @@ export default function Chessboard({ chessboardData, currentPlayerTurn, onSelect
     return (
         <div className={classes.Chessboard}>
 
-            <ChessboardBorderTop>{borderTop}</ChessboardBorderTop>
-            <ChessboardBorderBottom>{borderLeft}</ChessboardBorderBottom>
-            <ChessboardBorderLeft>{borderRight}</ChessboardBorderLeft>
-            <ChessboardBorderRight>{borderBottom}</ChessboardBorderRight>
-            <ChessboardCorner topLeft/>
-            <ChessboardCorner topRight/>
-            <ChessboardCorner bottomLeft/>
-            <ChessboardCorner bottomRight/>
             {chessboardData.map((chessboardLine, y) => {
 
                 return chessboardLine.map((piece, x) => {
@@ -69,6 +82,20 @@ export default function Chessboard({ chessboardData, currentPlayerTurn, onSelect
                     />
                 })
             })}
+            <ChessboardModal>
+                {showMessage && <ChessboardMessage message={message} 
+                className={messageClasses}
+                onClose={() => hideMessage()}/>}
+                {children}
+                </ChessboardModal>
+            <ChessboardBorderTop>{borderTop}</ChessboardBorderTop>
+            <ChessboardBorderBottom>{borderLeft}</ChessboardBorderBottom>
+            <ChessboardBorderLeft>{borderRight}</ChessboardBorderLeft>
+            <ChessboardBorderRight>{borderBottom}</ChessboardBorderRight>
+            <ChessboardCorner topLeft />
+            <ChessboardCorner topRight />
+            <ChessboardCorner bottomLeft />
+            <ChessboardCorner bottomRight />
         </div>
     )
 }
