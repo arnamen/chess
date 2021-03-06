@@ -31,7 +31,8 @@ interface State {
     selectedPiece: SelectedPiece,
     possibleMoves: TileIndex[],
     checkInfo: CheckInfo | null,
-    message?: string;
+    message?: string,
+    gameStarted: boolean
 }
 
 //white - "+", black - "-"
@@ -51,6 +52,7 @@ class GameManager extends Component<Props, State> {
             selectedPiece: null,
             possibleMoves: [],
             checkInfo: null,
+            gameStarted: false
         };
     }
 
@@ -132,12 +134,12 @@ class GameManager extends Component<Props, State> {
             onMovePiece={this.onMovePiece.bind(this)}
             message={this.state.message}
             onClearMessage={() => this.setState({message: undefined})}>
-            <OrangeButton onClick={() => { }}>
+            {!this.state.gameStarted && <OrangeButton onClick={() => this.setState({gameStarted: true})}>
                 <span>Player VS Player</span>
-             </OrangeButton>
-             <OrangeButton onClick={() => this.setState({message: 'This mode currently unavailable'})}>
+             </OrangeButton>}
+             {!this.state.gameStarted && <OrangeButton onClick={() => this.setState({message: 'This mode currently unavailable'})}>
                 <span>Player VS AI</span>
-             </OrangeButton>
+             </OrangeButton>}
         </Chessboard>;
 
         return (
