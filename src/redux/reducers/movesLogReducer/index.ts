@@ -8,7 +8,8 @@ const initialState: StateInterface = {
         gameEnd: false,
         oldPos: {x:0, y:0},
         newPos: {x:1, y:1},
-        chessboard: []
+        chessboard: [],
+        currentPlayer: 'WHITE'
     }],
 }
 

@@ -7,7 +7,8 @@ export interface Move {
     gameEnd: boolean,
     oldPos: Point,
     newPos: Point,
-    chessboard: ChessPieceType[][]
+    chessboard: ChessPieceType[][],
+    currentPlayer: 'WHITE' | 'BLACK'
 }
 
 export function typedAction<T extends string>(type: T): { type: T };

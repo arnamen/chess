@@ -1,6 +1,8 @@
 import React, { ReactElement } from 'react'
 import styled from 'styled-components';
 
+import MovePlate from './MovePlate';
+
 import {Move} from '../../redux/reducers/movesLogReducer/types';
 
 import bordersTexture from '../../assets/movesLog/borders/textures/texture-seamless-wood-5.jpg';
@@ -8,11 +10,12 @@ import backgroundTexture from '../../assets/movesLog/background/movesLog-backgro
 
 const MovesLogBackdrop = styled.div`
     display: inline-block;
+    position: relative;
     width: 20vw;
     max-width: 240px;
     height: 42vw;
     max-height: 504px;
-    padding: 1vw;
+    padding: 2vw 1vw 1vw 1vw;
     background: url(${bordersTexture}) center center/cover repeat;
 `
 
@@ -32,6 +35,19 @@ const MovesLog = styled.div`
         background-color: rgba(0,0,0,0.1);
     }
 `
+
+const MovesLogHeader = styled.div`
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    color: white;
+    text-shadow: 1px 1px black;
+    font-size: 25px;
+    font-weight: 700;
+    text-align: center;
+    margin-top: 0.25vw;
+`
 interface Props {
     moves: Move[]
 }
@@ -40,8 +56,9 @@ export default function index({moves}: Props): ReactElement {
     console.log(moves)
     return (
         <MovesLogBackdrop>
+            <MovesLogHeader><span>Moves log</span></MovesLogHeader>
             <MovesLog>
-
+                <MovePlate moveData={moves[0]}/>
             </MovesLog>
         </MovesLogBackdrop>
     )
