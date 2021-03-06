@@ -33,5 +33,9 @@ export const addMoveToLog = (move: Move) => {
 export const RemoveMoveFromLog = (moveIndex?: number) => {
   return typedAction('movesLog/remove', {moveIndex});
 }
+export const updateMoveInLog = (moveIndex: number, updatedMove: Move) => {
+  return typedAction('movesLog/update', {moveIndex, updatedMove});
+}
 
-export type actionTypes = ReturnType<typeof addMoveToLog | typeof RemoveMoveFromLog>;
+
+export type actionTypes = ReturnType<typeof addMoveToLog | typeof RemoveMoveFromLog | typeof updateMoveInLog>;

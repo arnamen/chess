@@ -53,12 +53,14 @@ interface Props {
 }
 
 export default function index({moves}: Props): ReactElement {
-    console.log(moves)
+
     return (
         <MovesLogBackdrop>
             <MovesLogHeader><span>Moves log</span></MovesLogHeader>
             <MovesLog>
-                <MovePlate moveData={moves[0]}/>
+                {moves.map(move => <MovePlate 
+                key={`${move.currentPlayer}-${move.gameEnd}-${move.gameStart}-${move.oldPos.x}-${move.oldPos.y}-${move.newPos.x}-${move.newPos.y}`} 
+                moveData={move}/>)}
             </MovesLog>
         </MovesLogBackdrop>
     )

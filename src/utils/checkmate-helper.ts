@@ -94,10 +94,7 @@ export const isCheckmate = (chessboard: ChessPieceType[][], king: SelectedPiece)
     }
     //we will get here only if only 1 piece is threatening to the king
     const [threateningPiece] = threateningOpponentPieces;
-    console.log('------------------')
     const defendingMoves: TileIndex[] = getDefendKingMoves(king, threateningPiece, alliedFiguresPossibleMoves);
-    console.log('def', alliedFiguresPossibleMoves)
-    console.log(defendingMoves)
     //if impossible to defend king - it is a checkmate
     if(defendingMoves.length === 0) {
         return {

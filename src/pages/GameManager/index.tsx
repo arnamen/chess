@@ -3,7 +3,7 @@ import { connect, ConnectedProps } from 'react-redux';
 
 import { TileIndex } from '../../components/Tile';
 import { updateChessboard, updateChessboardOneTile, createChessboard, WHITE, BLACK, SelectedPiece, chessboardMakeMove } from '../../redux/reducers/chessboardReducer/types';
-import  { Move, addMoveToLog, RemoveMoveFromLog } from '../../redux/reducers/movesLogReducer/types';
+import  { Move, addMoveToLog, RemoveMoveFromLog, updateMoveInLog } from '../../redux/reducers/movesLogReducer/types';
 import { makeTempMove } from '../../utils/moves-test-move';
 import { RootState } from '../../redux/index';
 import Chessboard from '../../components/Chessboard';
@@ -12,14 +12,14 @@ import OrangeButton from '../../components/Chessboard/ChessboardModal/OrangeButt
 
 import { findPieceOnBoard } from '../../utils/find-piece-on-board';
 import { getPossibleMoves } from '../../utils/moves-logic-helper';
-import { isCheck, CheckInfo, isCheckmate } from '../../utils/checkmate-helper';
+import { isCheck, CheckInfo, isCheckmate, CheckmateInfo } from '../../utils/checkmate-helper';
 const mapStateToProps = (state: RootState) => ({
     chessboard: state.chessboard.chessboard,
     movesLog: state.movesLog.movesLog
 })
 
 const mapDispatchToProps = {
-    updateChessboard, updateChessboardOneTile, createChessboard, chessboardMakeMove, addMoveToLog, RemoveMoveFromLog
+    updateChessboard, updateChessboardOneTile, createChessboard, chessboardMakeMove, addMoveToLog, RemoveMoveFromLog,  updateMoveInLog
 }
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
@@ -34,7 +34,9 @@ interface State {
     checkInfo: CheckInfo | null,
     message?: string,
     gameStarted: boolean,
-    gameFinished: boolean
+    gameFinished: boolean,
+    isFirstMoveMade: boolean, //for log purposes
+    showWinner: boolean
 }
 
 //white - "+", black - "-"
@@ -56,6 +58,8 @@ class GameManager extends Component<Props, State> {
             checkInfo: null,
             gameStarted: false,
             gameFinished: false,
+            isFirstMoveMade: false,
+            showWinner: false
         };
     }
 
@@ -64,16 +68,14 @@ class GameManager extends Component<Props, State> {
     }
 
     componentDidUpdate() {
-        // console.log('player side: ' + this.state.currentPlayerTurn);
-        let checkmateInfo = null;
         if (this.props.chessboard) {
-            const enemyKing = this.state.currentPlayerTurn === 'WHITE' ? WHITE.KING : BLACK.KING;
+            /* const enemyKing = this.state.currentPlayerTurn === 'WHITE' ? WHITE.KING : BLACK.KING;
             const [enemyKingData] = findPieceOnBoard(this.props.chessboard, enemyKing);
-            checkmateInfo = isCheckmate(this.props.chessboard, enemyKingData);
-            if (checkmateInfo && !this.state.gameFinished) {
+            checkmateInfo = isCheckmate(this.props.chessboard, enemyKingData); */
+            if (this.state.gameFinished && this.state.showWinner) {
                 this.setState({
-                    gameFinished: true,
-                    message: `Игра окончена. Победили ${this.state.currentPlayerTurn === 'BLACK' ? 'белые' : 'черные'}`
+                    message: `Game over. Winner is ${this.state.currentPlayerTurn === 'BLACK' ? 'white' : 'black'}`,
+                    showWinner: false
                 })
             }
         }
@@ -101,13 +103,13 @@ class GameManager extends Component<Props, State> {
     }
 
     onMovePiece(tileIndex: TileIndex) {
-        if (this.state.selectedPiece?.tileIndex && this.props.chessboard) {
+        if(!this.state.selectedPiece) return;
+        if (this.state.selectedPiece.tileIndex && this.props.chessboard) {
             //if there is check to the king. 
             //Will return null if there is no check, else will return detailed data
             const checkInfo = isCheck(this.props.chessboard, this.state.currentPlayerTurn);
-
-            if (checkInfo) {
-                const tempChessboard = makeTempMove(this.props.chessboard, this.state.selectedPiece?.tileIndex, tileIndex);
+            const tempChessboard = makeTempMove(this.props.chessboard, this.state.selectedPiece?.tileIndex, tileIndex);
+            if (checkInfo) {  
                 //check if check remains after palyer makes move
                 const tempCheckInfo = isCheck(tempChessboard, this.state.currentPlayerTurn);
                 //if check remains notify player about check
@@ -118,12 +120,27 @@ class GameManager extends Component<Props, State> {
                     return;
                 }
             }
+
+            const enemyKing = this.state.currentPlayerTurn === 'BLACK' ? WHITE.KING : BLACK.KING;
+            const [enemyKingData] = findPieceOnBoard(this.props.chessboard, enemyKing);
+            const checkmateInfo: CheckmateInfo | null = isCheckmate(tempChessboard, enemyKingData);
             this.props.chessboardMakeMove(this.state.selectedPiece?.tileIndex, tileIndex);
+            this.props.addMoveToLog({
+                gameStart: !this.state.isFirstMoveMade,
+                gameEnd: !!checkmateInfo,
+                oldPos: this.state.selectedPiece?.tileIndex,
+                newPos: tileIndex,
+                chessboard: tempChessboard, //save chessboard state after move was made
+                currentPlayer: this.state.currentPlayerTurn
+            })
             this.setState({
                 selectedPiece: null,
                 possibleMoves: [],
                 currentPlayerTurn: this.state.currentPlayerTurn === 'WHITE' ? 'BLACK' : 'WHITE',
-                checkInfo: null
+                checkInfo: null,
+                isFirstMoveMade: true,
+                gameFinished: !!checkmateInfo,
+                showWinner: !!checkmateInfo
             })
 
         }
@@ -135,7 +152,8 @@ class GameManager extends Component<Props, State> {
             this.props.createChessboard();
             return this.setState({
                 gameFinished: false,
-                message: undefined
+                message: undefined,
+                isFirstMoveMade: false
             })
         }
         return this.setState({message: undefined});
