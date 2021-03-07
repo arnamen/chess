@@ -58,17 +58,19 @@ interface Props {
     moveData: Move
 }
 
-export default function index({moveData}: Props): ReactElement {
+export default React.forwardRef<HTMLDivElement, Props>(function index({moveData}: Props, ref): ReactElement {
 
     const xAxisSymbols = 'ABCDEFGH';
 
     return (
         <MovePlate playersSideColor={moveData.currentPlayer} 
         gameStart={moveData.gameStart} 
-        gameEnd={moveData.gameEnd}>
+        gameEnd={moveData.gameEnd}
+        ref={ref}>
             <MoveValue>{xAxisSymbols.substr(moveData.oldPos.x, 1) + moveData.oldPos.y}</MoveValue>
             <MoveArrow className={classes.MoveArrow} style={{fill: moveData.currentPlayer.toLowerCase()}}/>
             <MoveValue>{xAxisSymbols.substr(moveData.newPos.x, 1) + moveData.newPos.y}</MoveValue>
         </MovePlate>
     )
 }
+)

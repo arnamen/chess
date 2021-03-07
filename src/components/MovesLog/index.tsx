@@ -1,4 +1,4 @@
-import React, { ReactElement } from 'react'
+import React, { ReactElement, useEffect, useRef } from 'react'
 import styled from 'styled-components';
 
 import MovePlate from './MovePlate';
@@ -9,13 +9,13 @@ import bordersTexture from '../../assets/movesLog/borders/textures/texture-seaml
 import backgroundTexture from '../../assets/movesLog/background/movesLog-background.jpg';
 
 const MovesLogBackdrop = styled.div`
-    display: inline-block;
+    display: inline-flex;
     position: relative;
     width: 20vw;
     max-width: 240px;
-    height: 42vw;
+    height: 40vw;
     max-height: 504px;
-    padding: 2vw 1vw 1vw 1vw;
+    padding: 2.5vw 1vw 1vw 1vw;
     background: url(${bordersTexture}) center center/cover repeat;
 `
 
@@ -25,6 +25,7 @@ const MovesLog = styled.div`
     height: 100%;
     background: url(${backgroundTexture}) center center/cover repeat;
     box-shadow: 2px 3px 25px 14px rgb(34 60 80 / 33%) inset;
+    overflow: auto;
     &:before {
         content: '';
         position: absolute;
@@ -43,23 +44,30 @@ const MovesLogHeader = styled.div`
     right: 0;
     color: white;
     text-shadow: 1px 1px black;
-    font-size: 25px;
+    font-size: min(25px, 1.5vw);
     font-weight: 700;
     text-align: center;
-    margin-top: 0.25vw;
+    margin-top: 0.5vw;
 `
 interface Props {
     moves: Move[]
 }
 
-export default function index({moves}: Props): ReactElement {
+export default function MovesLogComponent({moves}: Props): ReactElement {
+
+    const lastElementRef = useRef<HTMLDivElement | null>(null);
+
+    useEffect(() => {
+        if(lastElementRef.current) lastElementRef.current.scrollIntoView();
+    }, [moves])
 
     return (
         <MovesLogBackdrop>
             <MovesLogHeader><span>Moves log</span></MovesLogHeader>
             <MovesLog>
-                {moves.map(move => <MovePlate 
+                {moves.map((move, index) => <MovePlate 
                 key={`${move.currentPlayer}-${move.gameEnd}-${move.gameStart}-${move.oldPos.x}-${move.oldPos.y}-${move.newPos.x}-${move.newPos.y}`} 
+                ref={index === moves.length - 1 ? lastElementRef : null}
                 moveData={move}/>)}
             </MovesLog>
         </MovesLogBackdrop>
