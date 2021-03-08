@@ -27,11 +27,12 @@ interface Props {
     onClearMessage:() => void,
     checkInfo: CheckInfo | null,
     message?: string,
+    isGameFinished: boolean,
     children?: React.ReactNode
 
 }
 
-export default function Chessboard({ chessboardData, currentPlayerTurn, onSelectPiece, highlightedTiles, selectedPiece, onMovePiece, checkInfo, children, message, onClearMessage }: Props): ReactElement {
+export default function Chessboard({ chessboardData, currentPlayerTurn, onSelectPiece, highlightedTiles, selectedPiece, onMovePiece, checkInfo, children, message, onClearMessage, isGameFinished }: Props): ReactElement {
 
     const [showMessage, setShowMessage] = useState(false);
     const [messageClasses, setMessageClasses] = useState<string[]>([]);
@@ -76,16 +77,17 @@ export default function Chessboard({ chessboardData, currentPlayerTurn, onSelect
                         isSelected={selectedPiece?.tileIndex.x === x && selectedPiece.tileIndex.y === y}
                         isImportant={checkInfo?.king?.tileIndex.y === y && checkInfo?.king?.tileIndex.x === x}
                         isDanger={checkInfo?.threateningPiece?.tileIndex.y === y && checkInfo?.threateningPiece?.tileIndex.x === x}
+                        isGameFinished={isGameFinished}
                         onSelectPiece={onSelectPiece}
                         onMovePiece={onMovePiece}
                         key={`${y * 8 + x}_${piece.side}_${piece.type}`}
                     />
                 })
             })}
-            <ChessboardModal>
-                {showMessage && <ChessboardMessage message={message} 
+            {showMessage && <ChessboardMessage message={message} 
                 className={messageClasses}
                 onClose={() => hideMessage()}/>}
+            <ChessboardModal>
                 {children}
                 </ChessboardModal>
             <ChessboardBorderTop>{borderTop}</ChessboardBorderTop>

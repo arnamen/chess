@@ -18,6 +18,7 @@ interface Props {
     isHighlighted?: boolean,
     isImportant?: boolean,
     isDanger?: boolean,
+    isGameFinished: boolean,
     onSelectPiece: (selectedPiece: SelectedPiece) => void,
     onMovePiece: (tileIndex: TileIndex) => void,
 }

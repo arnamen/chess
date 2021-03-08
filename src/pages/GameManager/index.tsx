@@ -171,7 +171,8 @@ class GameManager extends Component<Props, State> {
             checkInfo={this.state.checkInfo} //pass info about if there is check to the king
             onMovePiece={this.onMovePiece.bind(this)}
             message={this.state.message}
-            onClearMessage={this.onClearMessage.bind(this)}>
+            onClearMessage={this.onClearMessage.bind(this)}
+            isGameFinished={this.state.gameFinished}>
             {!this.state.gameStarted && <OrangeButton onClick={() => this.setState({gameStarted: true})}>
                 <span>Player VS Player</span>
              </OrangeButton>}
