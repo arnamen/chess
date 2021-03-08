@@ -16,7 +16,7 @@ const GreenButton = styled.button`
     cursor: pointer;
     background-color: #0f0;
     font-family: teletoon;
-    min-width: 150px;
+    max-width: 100%;
     &:hover {
         opacity: 1;
     }

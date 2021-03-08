@@ -21,12 +21,20 @@ const MessageBackdrop = styled.div`
 const MessageBox = styled.div`
     padding-top: 15px;
     fonst-size: 28px;
+    display: -webkit-box;
+    display: -webkit-flex;
+    display: -ms-flexbox;
     display: flex;
+    -webkit-flex-direction: column;
+    -ms-flex-direction: column;
     flex-direction: column;
+    -webkit-box-pack: center;
+    -webkit-justify-content: center;
+    -ms-flex-pack: center;
     justify-content: center;
-    min-width: 300px;
+    max-width: 80%;
     max-height: 50%;
-    overflow: auto;
+    overflow-y: auto;
     background-color: white;
     border: black;
     text-align: center;
@@ -34,6 +42,7 @@ const MessageBox = styled.div`
 
 const Message = styled.span`
     font-size: 20px;
+    padding: 0 5px;
 `
 
 interface Props {

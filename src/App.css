@@ -3,3 +3,11 @@
   justify-content: space-around;
   margin: 0 1vw;
 }
+
+@media (max-width: 650px) {
+  .App {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 0 1vw;
+  }
+}

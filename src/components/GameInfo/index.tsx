@@ -13,6 +13,12 @@ const GameInfoBackdrop = styled.div`
     max-height: 504px;
     padding: 2.5vw 1vw 1vw 1vw;
     background: url(${bordersTexture}) center center/cover repeat;
+    @media (max-width: 650px) {
+        margin-top: 10px;
+        height: 40vh;
+        width: 40vw;
+        order: 3;
+      }
 `
 
 const GameInfo = styled.div`
@@ -52,7 +58,7 @@ background-clip: text;
 -webkit-background-clip: text;
 color: transparent;
 font-weight: 700;
-font-size: 25px;
+font-size: min(25px, 2vw);
 `
 interface Props {
 }

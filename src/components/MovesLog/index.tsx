@@ -17,6 +17,12 @@ const MovesLogBackdrop = styled.div`
     max-height: 504px;
     padding: 2.5vw 1vw 1vw 1vw;
     background: url(${bordersTexture}) center center/cover repeat;
+    @media (max-width: 650px) {
+        order: 2;
+        margin-top: 10px;
+        height: 40vh;
+        width: 40vw;
+      }
 `
 
 const MovesLog = styled.div`
@@ -58,7 +64,7 @@ export default function MovesLogComponent({moves}: Props): ReactElement {
     const lastElementRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
-        if(lastElementRef.current) lastElementRef.current.scrollIntoView();
+        if(lastElementRef.current && window.innerWidth > 650) lastElementRef.current.scrollIntoView();
     }, [moves])
 
     return (

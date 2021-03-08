@@ -42,6 +42,7 @@ height: 10%;
         if(props.gameEnd) return '#f00';
         else return '#000';
     }}
+    
 }
 `
 
@@ -50,7 +51,7 @@ const MoveValue = styled.div`
     text-align: center;
     color: white;
     text-shadow: 1px 1px black;
-    font-size: 25px;
+    font-size: min(25px, 2vw);
     font-weight: 700;
 `
 

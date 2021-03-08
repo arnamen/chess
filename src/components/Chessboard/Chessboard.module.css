@@ -10,3 +10,13 @@
     background-color: #b58863;
     grid-template-columns: repeat(8, 1fr);
 }
+
+@media (max-width: 650px) {
+    .Chessboard {
+        order: 1;
+        width: 50vh;
+        height: 50vh;
+        max-width: 90vw;
+        max-height: 90vw;
+    }
+  }
