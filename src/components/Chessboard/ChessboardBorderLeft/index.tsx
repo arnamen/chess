@@ -5,14 +5,20 @@ import woodenBorder from '../../../assets/chessboard/borders/textures/wood-seaml
 
 const BorderColumnLeft = styled.div`
     position: absolute;
-    top: 1vw;
+    top: max(1vw , 15px);
     left: 0;
     padding-top: 0.5vw;
     width: 1vw;
     height: calc(100% - 2vw);
+    min-width: 15px;
+    min-height: 15px;
     display: flex;
     flex-direction: column;
+    align-items: center;
     background: URL(${woodenBorder}) center center/cover repeat;
+    @media {
+        padding-top: 1vw;
+    }
 `
 
 export default function CheessboardBorderLeft({children}: {children?: React.ReactNode}) {

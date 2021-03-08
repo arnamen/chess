@@ -19,6 +19,8 @@ const BorderCorner = styled.div<StyledBorderCornerProps>`
     background: URL(${woodenBorder}) center center/cover no-repeat;
     width: 1vw;
     height: 1vw;
+    min-height: 15px;
+    min-width: 15px;
     max-width: 70px;
     max-height: 70px;
     box-sizing:border-box;

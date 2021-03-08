@@ -89,9 +89,9 @@ export default function Chessboard({ chessboardData, currentPlayerTurn, onSelect
                 {children}
                 </ChessboardModal>
             <ChessboardBorderTop>{borderTop}</ChessboardBorderTop>
-            <ChessboardBorderBottom>{borderLeft}</ChessboardBorderBottom>
-            <ChessboardBorderLeft>{borderRight}</ChessboardBorderLeft>
-            <ChessboardBorderRight>{borderBottom}</ChessboardBorderRight>
+            <ChessboardBorderBottom>{borderBottom}</ChessboardBorderBottom>
+            <ChessboardBorderLeft>{borderLeft}</ChessboardBorderLeft>
+            <ChessboardBorderRight>{borderRight}</ChessboardBorderRight>
             <ChessboardCorner topLeft />
             <ChessboardCorner topRight />
             <ChessboardCorner bottomLeft />

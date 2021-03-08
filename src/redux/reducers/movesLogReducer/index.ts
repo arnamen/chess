@@ -26,6 +26,7 @@ const reducer: Reducer<StateInterface, actionTypes> = (state = initialState, act
         case 'movesLog/remove':
             const movesLog = state.movesLog.slice();
             if (action.payload.moveIndex) movesLog.splice(action.payload.moveIndex, 1);
+            console.log(movesLog)
             return { ...state, movesLog }
         case 'movesLog/update':
             return updateMoveInLog(state, action);

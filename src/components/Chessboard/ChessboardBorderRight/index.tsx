@@ -10,6 +10,8 @@ const BorderColumnRight = styled.div`
     padding-top: 0.5vw;
     width: 1vw;
     height: calc(100% - 2vw);
+    min-width: 15px;
+    min-height: 15px;
     display: flex;
     flex-direction: column;
     background: URL(${woodenBorder}) center center/cover repeat;

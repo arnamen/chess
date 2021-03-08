@@ -14,7 +14,8 @@ const GameInfoBackdrop = styled.div`
     padding: 2.5vw 1vw 1vw 1vw;
     background: url(${bordersTexture}) center center/cover repeat;
     @media (max-width: 650px) {
-        margin-top: 10px;
+        padding: 3vh 1vw 1vh 1vw;
+        margin-top: 2vh;
         height: 40vh;
         width: 40vw;
         order: 3;

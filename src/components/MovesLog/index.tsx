@@ -1,12 +1,21 @@
 import React, { ReactElement, useEffect, useRef } from 'react'
 import styled from 'styled-components';
+import { connect, ConnectedProps } from 'react-redux';
+import equal from 'deep-equal';
 
 import MovePlate from './MovePlate';
 
 import {Move} from '../../redux/reducers/movesLogReducer/types';
 
+import { updateChessboard, createChessboard } from '../../redux/reducers/chessboardReducer/types';
+import { RemoveMoveFromLog } from '../../redux/reducers/movesLogReducer/types';
+
 import bordersTexture from '../../assets/movesLog/borders/textures/texture-seamless-wood-5.jpg';
 import backgroundTexture from '../../assets/movesLog/background/movesLog-background.jpg';
+
+const mapDispatchToProps = {updateChessboard, RemoveMoveFromLog, createChessboard};
+
+const connector = connect(null, mapDispatchToProps);
 
 const MovesLogBackdrop = styled.div`
     display: inline-flex;
@@ -22,6 +31,8 @@ const MovesLogBackdrop = styled.div`
         margin-top: 10px;
         height: 40vh;
         width: 40vw;
+        padding: 3vh 1vw 1vh 1vw;
+        margin-top: 2vh;
       }
 `
 
@@ -59,13 +70,33 @@ interface Props {
     moves: Move[]
 }
 
-export default function MovesLogComponent({moves}: Props): ReactElement {
+type PropsFromRedux = ConnectedProps<typeof connector>;
+
+function MovesLogComponent({moves, updateChessboard, RemoveMoveFromLog, createChessboard}: Props & PropsFromRedux): ReactElement {
 
     const lastElementRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         if(lastElementRef.current && window.innerWidth > 650) lastElementRef.current.scrollIntoView();
     }, [moves])
+
+    const onUndoMove = (move: Move) => {
+        const moveIndex = moves.findIndex(curMove => equal(curMove.chessboard, move.chessboard));
+
+        if(moveIndex === 0) {
+            RemoveMoveFromLog(0);
+            createChessboard();
+            return;
+        }
+
+        if(moveIndex !== -1) {
+            for (let i = moves.length - 1; i >= moveIndex; i--) {
+                 RemoveMoveFromLog(i);
+            }
+            updateChessboard(moves[moveIndex - 1].chessboard);
+
+        }
+    }
 
     return (
         <MovesLogBackdrop>
@@ -74,8 +105,11 @@ export default function MovesLogComponent({moves}: Props): ReactElement {
                 {moves.map((move, index) => <MovePlate 
                 key={`${move.currentPlayer}-${move.gameEnd}-${move.gameStart}-${move.oldPos.x}-${move.oldPos.y}-${move.newPos.x}-${move.newPos.y}`} 
                 ref={index === moves.length - 1 ? lastElementRef : null}
-                moveData={move}/>)}
+                moveData={move}
+                onUndoMove={onUndoMove}/>)}
             </MovesLog>
         </MovesLogBackdrop>
     )
 }
+
+export default connector(MovesLogComponent);

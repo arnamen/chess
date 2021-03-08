@@ -4,13 +4,14 @@ import styled from 'styled-components';
 import {Move} from '../../../redux/reducers/movesLogReducer/types';
 
 import {ReactComponent as MoveArrow} from '../../../assets/movesLog/moveArrow/right-arrow.svg';
-
+import {ReactComponent as UndoArrow} from '../../../assets/movesLog/undoArrow/undo-arrow.svg';
 import classes from './style.module.css';
+
 
 interface MovePlateStyleProps {
     playersSideColor: 'WHITE' | 'BLACK',
     gameStart: boolean,
-    gameEnd: boolean
+    gameEnd: boolean,
 }
 
 const MovePlate = styled.div<MovePlateStyleProps>`
@@ -55,11 +56,26 @@ const MoveValue = styled.div`
     font-weight: 700;
 `
 
+const UndoButton = styled.button`
+    height: 100%;
+    width: 15%;
+    background-color: transparent;
+    border: none;
+    &:focus {
+        border: none;
+        outline: none;
+    }
+    &:hover {
+        cursor: pointer;
+    }
+`
+
 interface Props {
-    moveData: Move
+    moveData: Move,
+    onUndoMove: (move: Move) => void
 }
 
-export default React.forwardRef<HTMLDivElement, Props>(function index({moveData}: Props, ref): ReactElement {
+export default React.forwardRef<HTMLDivElement, Props>(function index({moveData, onUndoMove}: Props, ref): ReactElement {
 
     const xAxisSymbols = 'ABCDEFGH';
 
@@ -71,6 +87,9 @@ export default React.forwardRef<HTMLDivElement, Props>(function index({moveData}
             <MoveValue>{xAxisSymbols.substr(moveData.oldPos.x, 1) + moveData.oldPos.y}</MoveValue>
             <MoveArrow className={classes.MoveArrow} style={{fill: moveData.currentPlayer.toLowerCase()}}/>
             <MoveValue>{xAxisSymbols.substr(moveData.newPos.x, 1) + moveData.newPos.y}</MoveValue>
+            <UndoButton onClick={() =>onUndoMove(moveData)}>
+                <UndoArrow className={classes.UndoArrow}/>
+            </UndoButton>
         </MovePlate>
     )
 }

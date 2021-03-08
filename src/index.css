@@ -11,6 +11,7 @@ body {
   height: 100vh;
   overflow: auto;
   background: url('./assets/background/bg.jpg') center center/cover no-repeat;
+  background-color: black;
 }
 
 body::before {
