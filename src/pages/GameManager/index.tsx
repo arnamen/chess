@@ -1,5 +1,6 @@
 import { Component, ReactElement } from 'react'
 import { connect, ConnectedProps } from 'react-redux';
+import equal from 'deep-equal';
 
 import { TileIndex } from '../../components/Tile';
 import { updateChessboard, updateChessboardOneTile, createChessboard, WHITE, BLACK, SelectedPiece, chessboardMakeMove } from '../../redux/reducers/chessboardReducer/types';
@@ -25,7 +26,7 @@ const mapDispatchToProps = {
 const connector = connect(mapStateToProps, mapDispatchToProps);
 type PropsFromRedux = ConnectedProps<typeof connector>;
 interface Props extends PropsFromRedux {
-
+    moveReset?: boolean
 }
 interface State {
     currentPlayerTurn: 'WHITE' | 'BLACK',
@@ -67,15 +68,21 @@ class GameManager extends Component<Props, State> {
         this.props.createChessboard();
     }
 
-    componentDidUpdate() {
+    componentDidUpdate(prevProps: Props, prevState: State) {
         if (this.props.chessboard) {
-            /* const enemyKing = this.state.currentPlayerTurn === 'WHITE' ? WHITE.KING : BLACK.KING;
-            const [enemyKingData] = findPieceOnBoard(this.props.chessboard, enemyKing);
-            checkmateInfo = isCheckmate(this.props.chessboard, enemyKingData); */
+
+            if(prevProps.movesLog.length > this.props.movesLog.length) {
+                this.setState({
+                    possibleMoves: [],
+                    selectedPiece: null,
+                    checkInfo: null,
+                })
+            }
+
             if (this.state.gameFinished && this.state.showWinner) {
                 this.setState({
                     message: `Game over. Winner is ${this.state.currentPlayerTurn === 'BLACK' ? 'white' : 'black'}`,
-                    showWinner: false
+                    showWinner: false,
                 })
             }
         }
@@ -125,18 +132,23 @@ class GameManager extends Component<Props, State> {
             const [enemyKingData] = findPieceOnBoard(this.props.chessboard, enemyKing);
             const checkmateInfo: CheckmateInfo | null = isCheckmate(tempChessboard, enemyKingData);
             this.props.chessboardMakeMove(this.state.selectedPiece?.tileIndex, tileIndex);
+            //get previous player color if possible
+            const currentPlayerTurn = this.props.movesLog.length > 0 
+            ? (this.props.movesLog[this.props.movesLog.length-1].currentPlayer === 'WHITE' ? 'BLACK' : 'WHITE') 
+            : this.state.currentPlayerTurn === 'WHITE' ? 'WHITE' : 'BLACK';
+            
             this.props.addMoveToLog({
                 gameStart: !this.state.isFirstMoveMade,
                 gameEnd: !!checkmateInfo,
                 oldPos: this.state.selectedPiece?.tileIndex,
                 newPos: tileIndex,
                 chessboard: tempChessboard, //save chessboard state after move was made
-                currentPlayer: this.state.currentPlayerTurn
+                currentPlayer: currentPlayerTurn,
             })
             this.setState({
                 selectedPiece: null,
                 possibleMoves: [],
-                currentPlayerTurn: this.state.currentPlayerTurn === 'WHITE' ? 'BLACK' : 'WHITE',
+                currentPlayerTurn: currentPlayerTurn === 'WHITE' ? 'BLACK' : 'WHITE',
                 checkInfo: null,
                 isFirstMoveMade: true,
                 gameFinished: !!checkmateInfo,

@@ -1,7 +1,8 @@
 import cloneDeep from 'clone-deep'
 import { Reducer } from 'redux'
+import { TileIndex } from '../../../components/Tile';
 
-import { actionTypes, StateInterface } from './types';
+import { actionTypes, StateInterface, Move } from './types';
 
 const initialState: StateInterface = {
     movesLog: [],
@@ -24,9 +25,14 @@ const reducer: Reducer<StateInterface, actionTypes> = (state = initialState, act
         case 'movesLog/add':
             return { ...state, movesLog: [...state.movesLog, action.payload.move] }
         case 'movesLog/remove':
-            const movesLog = state.movesLog.slice();
-            if (typeof action.payload.moveIndex !== 'undefined') movesLog.splice(action.payload.moveIndex, 1);
-            return { ...state, movesLog }
+            const newMovesLog:Move[] = [];
+            if (typeof action.payload.moveIndex !== 'undefined') {
+                for (let i = 0; i < action.payload.moveIndex; i++) {
+                    newMovesLog.push(state.movesLog[i]);
+                    
+                }
+            }
+            return { ...state, movesLog: newMovesLog }
         case 'movesLog/update':
             return updateMoveInLog(state, action);
         default:
