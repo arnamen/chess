@@ -4,7 +4,7 @@ import { TileIndex } from '../components/Tile';
 export const getPossibleMoves_ROOK = (chessboard: ChessPieceType[][], selectedPiece: SelectedPiece): TileIndex[] => {
 
     if (!selectedPiece ||
-        (selectedPiece.piece.type !== 'BISHOP' &&
+        (selectedPiece.piece.type !== 'ROOK' &&
             selectedPiece.piece.type !== 'QUEEN')
     ) return [];
 
