@@ -35,8 +35,8 @@ export default function Tile({ chessPieceType, tileIndex, isActive, isSelected, 
     //svg image wrapped in component
     const Piece = getPieceElementByType(chessPieceType);
     if (Piece && isSelected) appliedClasses.push(classes.Tile__selected);
-    else if (Piece && isActive) appliedClasses.push(classes.Tile__active);
-    else if (isHighlighted) appliedClasses.push(classes.Tile__highlighted);
+    if (Piece && isActive) appliedClasses.push(classes.Tile__active);
+    if (isHighlighted) appliedClasses.push(classes.Tile__highlighted);
     //default tile
     let tile = <div
         className={appliedClasses.join(' ')}></div>

@@ -1,4 +1,5 @@
 import { Reducer } from 'redux'
+import cloneDeep from 'clone-deep';
 
 import { actionTypes, StateInterface, ChessPieceType, WHITE, BLACK } from './types';
 
@@ -77,10 +78,17 @@ const chessboardCreate = (state: StateInterface, action: actionTypes) => {
 }
 
 const chessboardMakeMove = (state: StateInterface, action: actionTypes) => {
-    if(action.type === 'chessboard/makeMove') {
+    if(action.type === 'chessboard/makeMove' && state.chessboard) {
         const tileFrom = action.payload.tileFrom;
         const tileTo = action.payload.tileTo;
-        let chessboard = state.chessboard?.slice();
+        if(state.chessboard[tileFrom.y][tileFrom.x].side === state.chessboard[tileTo.y][tileTo.x].side &&
+             (state.chessboard[tileFrom.y][tileFrom.x].type === 'KING' || state.chessboard[tileFrom.y][tileFrom.x].type === 'ROOK') &&
+             (state.chessboard[tileTo.y][tileTo.x].type === 'KING' || state.chessboard[tileTo.y][tileTo.x].type === 'ROOK') &&
+             state.chessboard[tileFrom.y][tileFrom.x].type !== state.chessboard[tileTo.y][tileTo.x].type){
+                return chessboardMakeCastling(state, action);
+        }
+
+        let chessboard = state.chessboard.slice();
 
         if(chessboard) {
             chessboard[tileTo.y][tileTo.x] = chessboard[tileFrom.y][tileFrom.x];
@@ -90,6 +98,33 @@ const chessboardMakeMove = (state: StateInterface, action: actionTypes) => {
 
             return {...state, chessboard};
         }
+
+    }
+
+    return {...state}
+}
+
+const chessboardMakeCastling = (state: StateInterface, action: actionTypes) => {
+
+    if(action.type === 'chessboard/makeMove' && state.chessboard){
+
+    const tileFrom = action.payload.tileFrom;
+    const tileTo = action.payload.tileTo;
+    const king = state.chessboard[tileFrom.y][tileFrom.x].type === 'KING' ? tileFrom : tileTo;
+    const rook = state.chessboard[tileFrom.y][tileFrom.x].type === 'ROOK' ? tileFrom : tileTo;
+    //determine whether king to the left or to the right from rook
+    const direction = Math.sign(king.x - rook.x); //1 - king on the right side, "-1" - king on the left side
+    let chessboard = cloneDeep(state.chessboard);
+        //make castling
+        chessboard[king.y][king.x + direction*2] = cloneDeep(chessboard[king.y][king.x]);
+        chessboard[king.y][king.x + direction*2].isFirstMove = false;
+        chessboard[king.y][king.x] = WHITE.EMPTY;
+        //
+        chessboard[king.y][king.x + direction] = cloneDeep(chessboard[rook.y][rook.x]);
+        chessboard[king.y][king.x + direction].isFirstMove = false;
+        chessboard[rook.y][rook.x] = WHITE.EMPTY;
+
+        return {...state, chessboard}
 
     }
 

@@ -142,8 +142,11 @@ export const isCheck = (chessboard: ChessPieceType[][], playerSide: 'WHITE' | 'B
         for (let x = 0; x < _chessboard[y].length; x++) {
 
             const currentPiece: SelectedPiece = { piece: Object.assign(_chessboard[y][x]), tileIndex: { x, y } };
-            const opponentPiecePossibleMoves = getPossibleMoves(_chessboard, currentPiece);
-            const checkToTheKing = checkPossibleMovesThreat(opponentPiecePossibleMoves, king.tileIndex);
+            let opponentPiecePossibleMoves:TileIndex[] = [];
+            if(currentPiece.piece.side !== king.piece.side) {
+                opponentPiecePossibleMoves = getPossibleMoves(_chessboard, currentPiece);
+            }
+                const checkToTheKing = checkPossibleMovesThreat(opponentPiecePossibleMoves, king.tileIndex);
             if (checkToTheKing) {
 
                 const checkInfo: CheckInfo = {

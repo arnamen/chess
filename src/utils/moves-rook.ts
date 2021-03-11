@@ -62,7 +62,15 @@ export const getPossibleMoves_ROOK = (chessboard: ChessPieceType[][], selectedPi
             if (chessboard[y][x].side !== 'NONE') return possibleMoves;
             x--;
         }
-
+        
+        if(chessboard[y][x] && 
+            selectedPiece.piece.type === 'ROOK' &&
+            chessboard[y][x].side === selectedPiece.piece.side &&
+            chessboard[y][x].type === 'KING' &&
+            chessboard[y][x].isFirstMove && 
+            chessboard[selectedPiece.tileIndex.y][selectedPiece.tileIndex.x].isFirstMove) {
+                possibleMoves.push({ x, y });
+            }
         return possibleMoves;
 
     }
@@ -82,6 +90,15 @@ export const getPossibleMoves_ROOK = (chessboard: ChessPieceType[][], selectedPi
             x++;
         }
 
+        if(chessboard[y][x] && 
+            selectedPiece.piece.type === 'ROOK' &&
+            chessboard[y][x].side === selectedPiece.piece.side &&
+            chessboard[y][x].type === 'KING' &&
+            chessboard[y][x].isFirstMove && 
+            chessboard[selectedPiece.tileIndex.y][selectedPiece.tileIndex.x].isFirstMove) {
+                possibleMoves.push({ x, y });
+            }
+        
         return possibleMoves;
 
     }
